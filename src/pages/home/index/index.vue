@@ -31,7 +31,25 @@
         </div>
         <div class="goods-main">
             <div class="classify-name color-0">—— 潮流女装 ——</div>
-            <div class="goods-row-1"></div>
+            <div class="goods-row-1">
+                <div class="goods-column">
+                    <div class="goods-title">高跟鞋女2018新款春季单鞋仙女甜美链子尖头防水台细跟女鞋一字带</div>
+                    <div class="goods-tips">精品打折</div>
+                    <div class="goods-price bg-color-0">128元</div>
+                    <div class="goods-image">
+                        <img src="//vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt=""></img>
+                    </div>
+                </div>
+                <div class="goods-column">
+                    <div class="goos-list">
+                        <div class="goods-list-title">欧美尖头蝴蝶结拖鞋女夏外穿2018新款绸缎面细跟凉拖半拖鞋穆勒鞋</div>
+                        <div class="goods-list-tip">品质精挑</div>
+                        <div class="goods-list-image">
+                            <img src="//vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
        
     </div>
@@ -169,5 +187,100 @@
     .goods-main .classify-name.color-0{color:#f73b61}
     .goods-main .classify-name.color-1{color:#fe6719}
     .goods-main .classify-name.color-2{color:#5fc600}
+    .goods-main .goods-row-1{
+        width: 100%;
+        height: 3.5rem;
+        border-bottom: 1px solid #efefef;
+        display: flex;
+        overflow: hidden;
+    }
+    .goods-main .goods-row-1 .goods-column{
+        width: 50%;
+        height: 100%;
+        border-right: 1px solid #efefef;
+        position: relative;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-title{
+        width: 95%;
+        height: 0.32rem;
+        font-size: 0.28rem;
+        font-weight: bold;
+        position: absolute;
+        top: 0.2rem;
+        left: 0.2rem;
+        overflow: hidden;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-tips{
+        width: auto;
+        height: auto;
+        font-size: 0.28rem;
+        color: #cb385d;
+        position: absolute;
+        left: 0.2rem;
+        top: 0.6rem;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-price{
+        width: auto;
+        height: 0.4rem;
+        position: absolute;
+        right: 1rem;
+        top: 0.6rem;
+        font-size: 0.28rem;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-price.bg-color-0{background-color:#f21d4f;}
+    .goods-main .goods-row-1 .goods-column .goods-price.bg-color-2{background-color:#5fc600}
+    .goods-main .goods-row-1 .goods-column .goods-image{
+        width: 3rem;
+        height: 2rem;
+        position: absolute;
+        left: 0.35rem;
+        bottom: 0.3rem;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-image img{
+        width: 100%;
+        height: 100%;
+    }
+    .goods-main .goods-row-1 .goods-column .goos-list{
+        width: 100%;
+        height: 50%;
+        border-bottom: 1px solid #efefef;
+        position: relative;
+    }
+    .goods-main .goods-row-1 .goods-column .goos-list .goods-list-title{
+        position: absolute;
+        width: 2.04rem;
+        height: 0.32rem;
+        overflow: hidden;
+        left: 0.2rem;
+        top: 0.2rem;
+        font-size: 0.28rem;
+        font-weight: bold;
+        z-index: 1;
+    }
+    .goods-main .goods-row-1 .goods-column .goos-list .goods-list-tip{
+        width: auto;
+        height: auto;
+        font-size: 0.24rem;
+        color: #7b7f82;
+        text-align: center;
+        margin-top: 0.1rem;
+        position: absolute;
+        left:0.2rem;
+        top:0.6rem;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-list-image{
+        width: 1.2rem;
+        height: 1.2rem;
+        position: absolute;
+        right: 0.2rem;
+        top: 0.2rem;
+    }
+    .goods-main .goods-row-1 .goods-column .goods-list-image img{
+        width: 100%;
+        height: 100%;
+    }
+    
 
 </style>
