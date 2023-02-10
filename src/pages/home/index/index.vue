@@ -9,7 +9,13 @@
             <div class="login">登录</div>
         </div>
         <div class="banner-wrap">
-            <img alt="" src="//vueshop.glbuys.com/uploadfiles/1484285302.jpg"></img>
+            <div class="swiper-container" ref="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img alt="" src="//vueshop.glbuys.com/uploadfiles/1484285302.jpg"></img></div>
+                    <div class="swiper-slide"><img alt="" src="//vueshop.glbuys.com/uploadfiles/1484285302.jpg"></img></div>
+                    <div class="swiper-slide"><img alt="" src="//vueshop.glbuys.com/uploadfiles/1484285302.jpg"></img></div>
+                </div>
+            </div>
         </div>
         <div class="quick-nav">
             <ul class="item">
@@ -259,7 +265,8 @@
 </template>
 
 <script>
-   
+   import Swiper from '../../../assets/js/libs/swiper.js';
+
     export default {
         name: "index",
         data(){
@@ -270,6 +277,11 @@
         created(){
             this.isScroll = true;
             window.addEventListener('scroll',this.eventScrollTop)//用于解决单页面应用的bug
+        },
+        mounted(){
+            new Swiper(this.$refs['swiper-container'], {
+                autoplay: true,//可选选项，自动滑动
+            })
         },
         methods:{
             eventScrollTop(){
@@ -284,7 +296,6 @@
                         this.isScroll = true;
                         this.isScrollTop = false;
                     }
-                    
                 }
             }
         },

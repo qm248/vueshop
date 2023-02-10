@@ -1,5 +1,7 @@
 import axios from 'axios';
+let load=document.querySelector(".load");
 export function request(url,method="get",data={},config={}){
+    load.style.display="block";
     return axiosRequest(url, method,data, config)
 }
 
@@ -33,5 +35,8 @@ function axiosRequest(url,method,data,config) {
             axiosConfig[key]=config[key];
         }
     }
-    return axios(axiosConfig).then(res=>res.data);
+    return axios(axiosConfig).then(res=>{
+        load.style.display="none";
+        return res.data
+    });
 }
