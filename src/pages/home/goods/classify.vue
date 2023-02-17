@@ -98,7 +98,13 @@
         line-height: 0.8rem;
         overflow: hidden;
     }
-
+    .goods-main .classify-wrap .classify-item.active{
+       color: #ff0000;
+    }
+    .goods-main .goods-content{
+        width: 71%;
+        height: 100%;
+    }
 
 
 </style>
