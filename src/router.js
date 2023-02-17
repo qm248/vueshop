@@ -53,16 +53,16 @@ let router=new Router({
             component:()=>import("./pages/user/ucenter")
         },
         {
+            path:"/goods/classify",
+            name:"goods-classify",
+            component:()=>import("./pages/home/goods/classify"),
+        },
+        {
             path:"/goods",
             name:"goods",
             component:()=>import("./pages/home/goods"),
             redirect:"/goods/item",//页面重定向
             children:[
-                {
-                    path:"item",
-                    name:"goods-item",
-                    component:()=>import("./pages/home/goods/item")
-                },
                 {
                     path:"details",
                     name:"goods-details",
@@ -74,11 +74,6 @@ let router=new Router({
                     component:()=>import("./pages/home/goods/review")
                 }
             ]
-        },
-        {
-            path:"/classify",
-            name:"classify",
-            component:()=>import("./pages/home/classify")
         },
         {
             path:"/skip",
