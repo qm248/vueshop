@@ -56,6 +56,15 @@ let router=new Router({
             path:"/goods/classify",
             name:"goods-classify",
             component:()=>import("./pages/home/goods/classify"),
+            redirect:"/goods/classify/item",
+            children:[
+                {
+                    path:"item",
+                    name:"goods-classify-item",
+                    component:()=>import('./pages/home/goods/classify-item'),
+                    meta:{title:"商品分类"}
+                }
+            ]
         },
         {
             path:"/goods",

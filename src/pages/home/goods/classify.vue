@@ -1,45 +1,80 @@
 <template>
     <div class="page">
         <div class="search-header">
-            <div class="back"></div>
+            <div class="back" @click="goBack()"></div>
             <div class="search">请输入宝贝名称</div>
         </div>
         <div class="goods-main">
-            <div class="classify-wrap">
+            <div class="classify-wrap" ref="scroll-classify">
                 <div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
-                    <div class="classify-item">潮流女装</div>
+                    <div @click="seceltItem(index)" :class="{'classify-item':true,active:item.active}" v-for="(item,index) in classifys" :key="index">
+                        {{ item.title }}</div>
                 </div>
             </div>
             <div class="goods-content">
-                123
+                <router-view></router-view>
             </div>
         </div>
     </div>
-
   
 </template>
 
 <script>
+import IScroll from '../../../assets/js/libs/iscroll';
+import { mapActions , mapState} from 'vuex'
     export default {
-        name:"goods-classify"
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+            ...mapActions({
+                getClassify:"goods/getClassify"
+            }),
+            goBack(){
+                this.$router.go(-1)
+            },
+            scrollPreventDefault(e){
+                e.preventDefault();
+            },
+            seceltItem(index){
+                for(let i = 0; i<this.classifys.length; i++){
+                    if(index == i){
+                        this.classifys[i].active = true;
+                    }else{
+                        this.classifys[i].active = false;
+                    }
+                }
+            }
+        },
+        computed:{
+            ...mapState({
+                classifys:(state)=>state.goods.classifys
+            })
+        },
+        created(){
+            this.getClassify({
+                success:()=>{
+                    this.$nextTick(()=>{
+                        this.myScroll.refresh();
+                    })
+                }
+            })
+        },
+        mounted(){
+            document.title = this.$route.meta.title;
+            this.$refs['scroll-classify'].addEventListener('touchmove',this.scrollPreventDefault)
+            this.myScroll = new IScroll(this.$refs['scroll-classify'],{
+                scrollX:false,
+                scrollY:true,
+                preventDefault:false
+            })
+        },
+        beforeDestory(){
+            this.$refs['scroll-classify'].removeEventListener('touchmove',this.scrollPreventDefault)
+        }
+       
     }
 </script>
 
