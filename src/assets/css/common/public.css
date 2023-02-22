@@ -16,3 +16,7 @@ input,button{
     border-radius: 0;
     outline: none;
 }
+.no-data{
+    font-size: 0.28rem;
+    text-align: center;
+}

@@ -1,45 +1,69 @@
 <template>
     <div class="goods-content-main" ref="goods-classify-content">
-        <div>
-            <div class="goods-wrap" >
-                <div class="classify-name">服饰 </div>
+        <div v-show="goods.length>0">
+            <div class="goods-wrap" v-for="(item,index) in goods" :key="index" >
+                <div class="classify-name">{{ item.title }} </div>
                 <div class="goods-items-wrap">
-                    <ul>
-                        <li><img src="../../../assets/images/common/lazyImg.jpg"/> </li>
-                        <li>ffjbsJCKJBCJDHSB</li>
+                    <ul v-for="(item2,index2) in item.goods" :key="index2">
+                        <li><img src="../../../assets/images/common/lazyImg.jpg" :data-echo="item2.image"/> </li>
+                        <li>{{ item2.title }}</li>
                     </ul>
                 </div>
 
             </div>
         </div>
-        <div class="no-data">没有相关商品！</div>
+        <div v-show="goods.length<=0" class="no-data">没有相关商品！</div>
     </div>
   
 </template>
 
 <script>
 import IScroll from '../../../assets/js/libs/iscroll';
+import { mapActions,mapState } from 'vuex'
 export default {
-    data(){
-        return{
-
-        }
-    },
     methods:{
+        ...mapActions({
+            getGoods:"goods/getGoods"
+        }),
         scrollPreventDefault(e){
             e.preventDefault();
+        },
+        init(cid){
+            this.getGoods({cid:cid,success:()=>{
+                this.$nextTick(()=>{
+                    this.myScroll.refresh();
+                    this.$utils.lazyImg();
+                })
+        }});
         }
     },
-    mounted(){
-        this.$refs['goods-classify-content'].addEventListener('touchmove',this.scrollPreventDefault)
-            new IScroll(this.$refs['goods-classify-content'],{
-                scrollX:false,
-                scrollY:true,
-                preventDefault:false
-            })
+    computed:{
+        ...mapState({
+            goods:state=>state.goods.goods        })
     },
-    beforeDestory(){
-        this.$refs['goods-classify-content'].removeEventListener('touchmove',this.scrollPreventDefault)
+    created(){
+            this.cid=this.$route.query.cid?this.$route.query.cid:"";
+           this.init(this.cid);
+    },
+    mounted(){
+        this.$refs['goods-classify-content'].addEventListener("touchmove",this.scrollPreventDefault);
+        this.myScroll=new IScroll(this.$refs['goods-classify-content'], {
+            scrollX : false,
+            scrollY : true,
+            preventDefault : false
+        });
+
+        this.myScroll.on("scrollEnd",()=>{
+            this.$utils.lazyImg();
+        })
+    },
+    beforeRouteUpdate(to,from,next){
+        // console.log(to.query.cid);
+        this.init(to.query.cid);
+        next();
+    },
+    beforeDestroy(){
+        this.$refs['goods-classify-content'].removeEventListener("touchmove",this.scrollPreventDefault);
     }
 
 }

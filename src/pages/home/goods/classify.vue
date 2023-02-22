@@ -7,7 +7,7 @@
         <div class="goods-main">
             <div class="classify-wrap" ref="scroll-classify">
                 <div>
-                    <div @click="seceltItem(index)" :class="{'classify-item':true,active:item.active}" v-for="(item,index) in classifys" :key="index">
+                    <div ref="item" @click="replacePage('/goods/classify/item?cid='+item.cid+'',index)" :class="{'classify-item':true,active:item.active}" v-for="(item,index) in classifys" :key="index">
                         {{ item.title }}</div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
 
 <script>
 import IScroll from '../../../assets/js/libs/iscroll';
-import { mapActions , mapState} from 'vuex'
+import { mapActions , mapState , mapMutations} from 'vuex'
     export default {
         data(){
             return{
@@ -32,6 +32,9 @@ import { mapActions , mapState} from 'vuex'
             ...mapActions({
                 getClassify:"goods/getClassify"
             }),
+            ...mapMutations({
+                SECELT_ITEM:"goods/SECELT_ITEM"
+            }),
             goBack(){
                 this.$router.go(-1)
             },
@@ -39,13 +42,17 @@ import { mapActions , mapState} from 'vuex'
                 e.preventDefault();
             },
             seceltItem(index){
-                for(let i = 0; i<this.classifys.length; i++){
-                    if(index == i){
-                        this.classifys[i].active = true;
-                    }else{
-                        this.classifys[i].active = false;
-                    }
+                let topHeight=this.$refs['item'][0].offsetHeight*index;
+                let halfHeight=parseInt(this.$refs['scroll-classify'].offsetHeight/3);
+                let bottomHeight=parseInt(this.$refs['scroll-classify'].scrollHeight-topHeight);
+                if(topHeight>halfHeight && bottomHeight>this.$refs['scroll-classify'].offsetHeight){
+                    this.myScroll.scrollTo(0,-topHeight,1000,IScroll.utils.ease.elastic);
                 }
+                this.SECELT_ITEM({index:index})
+            },
+            replacePage(url,index){
+                this.$router.replace(url);
+                this.seceltItem(index);
             }
         },
         computed:{
@@ -54,13 +61,23 @@ import { mapActions , mapState} from 'vuex'
             })
         },
         created(){
-            this.getClassify({
-                success:()=>{
+            this.cid=this.$route.query.cid?this.$route.query.cid:'';
+           this.getClassify({success:()=>{
                     this.$nextTick(()=>{
                         this.myScroll.refresh();
-                    })
-                }
-            })
+                        if(this.classifys.length>0 && this.cid){
+                            let i=0;
+                            for(;i<this.classifys.length;i++){
+                                if(this.classifys[i].cid===this.cid){
+                                    break;
+                                }
+                            }
+                            this.seceltItem(i);
+                        }else{
+                            this.seceltItem(0);
+                        }
+                    });
+               }});
         },
         mounted(){
             document.title = this.$route.meta.title;
