@@ -2,7 +2,7 @@
     <div class="page">
         <div :class="{header:true, scroll:isScrollTop}" >
             <div class="classify-icon" @click="$router.push('/goods/classify')"></div>
-            <div class="search-wrap"  @click="search()">
+            <div class="search-wrap"  @click="searchShow.show=true">
                 <div class="search-icon"></div>
                 <div class="text">请输入宝贝名称</div>
             </div>
@@ -181,9 +181,6 @@
                     }
                 }
             },
-            search(){
-                this.searchShow.show=true;                
-            }
         },
         destroyed(){
             window.removeEventListener('scroll',this.eventScrollTop);//用于解决单页面应用的bug
