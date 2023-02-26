@@ -8,6 +8,11 @@ module.exports = {
       {
         allowTopLevelThis: true,
       },
-    ]
+    ],
+    ['import', {
+      libraryName: 'vant',
+      libraryDirectory: 'es',
+      style: true
+    }, 'vant']
   ]
 }

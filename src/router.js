@@ -89,6 +89,11 @@ let router=new Router({
             name:"skip",
             component:()=>import("./pages/skip")
         },
+        {
+            path:'/goods/search',
+            name:"goods-search",
+            component:()=>import('./pages/home/goods/search')
+        }
     ]
 });
 router.beforeEach((to,from,next)=>{
