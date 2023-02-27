@@ -13,10 +13,76 @@
                 <div class="order-item active">
                     <div class="order-text">综合</div>
                     <div class="order-icon"></div>
-                    <ul class="order-menu">
-
-                    </ul>
+                    <!-- <ul class="order-menu">
+                        <li class="">综合</li>
+                    </ul> -->
                 </div>
+            </div>
+        </div>
+        <div class="goods-main">
+            <div class="goods-list">
+                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
+                <div class="goods-content">
+                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
+                    <div class="goods-price">$13800</div>
+                    <div class="sales">销量<span>0</span>件</div>
+                </div>
+            </div>
+            <div class="goods-list">
+                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
+                <div class="goods-content">
+                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
+                    <div class="goods-price">$13800</div>
+                    <div class="sales">销量<span>0</span>件</div>
+                </div>
+            </div>
+            <div class="goods-list">
+                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
+                <div class="goods-content">
+                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
+                    <div class="goods-price">$13800</div>
+                    <div class="sales">销量<span>0</span>件</div>
+                </div>
+            </div>
+            <div class="no-data">没有相关商品！</div>
+        </div>
+        <div class="mask"></div>
+        <div class="screen move">
+            <div>
+                <div class="attr-wrap">
+                    <div class="attr-title-wrap">
+                        <div class="attr-name">分类</div>
+                        <div class="attr-icon"></div>
+                    </div>
+                    <div class="item-wrap">
+                        <div class="item active">潮流女装</div>
+                    </div>
+                </div>
+                <div style="width:100%;height: 1px;background-color: #efefef;"></div>
+                <div class="attr-wrap">
+                    <div class="attr-title-wrap">
+                        <div class="attr-name">价格区间</div>
+                        <div class="price-wrap">
+                            <div class="price-input">
+                                <input type="tel" placeholder="最低价">
+                            </div>
+                            <div class="price-line"></div>
+                            <div class="price-input">
+                                <input type="tel" placeholder="最高价">
+                            </div>
+                        </div>
+                        <div class="attr-icon"></div>
+                    </div>
+                    <div class="item-wrap">
+                        <div class="item active">1-50</div>
+                    </div>
+                </div>
+                <div style="width:100%;height: 0.3rem; background-color: #efefef;"></div>
+            </div>
+            <div class="handel-wrap">
+                <div class="item">共<span>18</span>件</div>
+                <div class="item reset">全部重置</div>
+                <div class="item sure">确定</div>
             </div>
         </div>
     </div>
@@ -133,7 +199,215 @@
     background-repeat: no-repeat;
 }
 .search-top .order-main .order-item .order-menu{
+    width: 688%;
+    height: auto;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1;
+    left: -35%;
+    top: 0.63rem;
+}
+.search-top .order-main .order-item .order-menu li{
+    width: 95%;
+    height: 0.8rem;
+    border-bottom: 1px solid #efefef;
+    font-size: 0.28rem;
+    line-height: 0.8rem;
+    padding-left: 0.4rem;
+}
+.search-top .order-main .order-item .order-menu li.active{
+    color: #fda208;
+}
+.goods-main{
+    width: 100%;
+    height: auto;
+    margin-top: 2rem;
+}
+.goods-main .goods-list {
+        width: 100%;
+        height: 2rem;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        overflow: hidden;
+        margin-bottom: 0.4rem;
+ }
 
+.goods-main .goods-list .image {
+        width: 2rem;
+        height: 2rem;
+        margin-left: 0.1rem;
+        overflow: hidden;
+        text-align: center;
+}
+
+.goods-main .goods-list .image img {
+        width: auto;
+        height: auto;
+        max-height: 100%;
+        max-height: 100%;
+}
+.goods-main .goods-list .goods-content{
+    width: 67%;
+    height: 98%;
+    border-bottom: 1px solid #ccc;
+}
+
+.goods-main .goods-list .goods-content .goods-title{
+    width: 95%;
+    height: 0.8rem;
+    font-size: 0.28rem;
+    overflow: hidden;
+}
+.goods-main .goods-list .goods-content .goods-price{
+    color: #f93036;
+    margin-top: 0.1rem;
+    font-size: 0.32rem;
+}
+.goods-main .goods-list .goods-content .sales{
+    font-size: 0.24rem;
+    color: #969696;
+    margin-top: 0.1rem;
+}
+.goods-main .goods-list .goods-content .sales span{
+    color: #fda208;
+}
+.mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.3);
+}
+.screen{
+    width: 80%;
+    height: 100%;
+    position:fixed;
+    z-index: 100;
+    right: 0;
+    top: 0;
+    background-color: #fff;
+    transform: translateX(100%);
+    overflow: hidden;
+
+}
+.screen.move{
+    transition: transfrom 0.3s;
+    transform:translateX(0%);
+
+}
+.screen.unmove{
+    transition: transform 0.3s;
+    transform:translateX(100%);
+}
+.screen .attr-wrap{
+    width: 100%;
+}
+
+.screen .attr-wrap .attr-title-wrap{
+    width: 94%;
+    height: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}
+
+.screen .attr-wrap .attr-title-wrap .attr-name{
+    font-size: 0.32rem;
+}
+.screen .attr-wrap .attr-title-wrap .attr-icon{
+    width: 0.4rem;
+    height: 0.4rem;
+    background-image: url('../.../../../../assets/images/home/goods/down.png');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.screen .attr-wrap .attr-title-wrap .attr-icon.up{
+    background-image: url('../.../../../../assets/images/home/goods/up.png');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.screen .attr-wrap .attr-title-wrap .price-wrap{
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    margin-left: 18%;
+}
+.screen .attr-wrap .attr-title-wrap .price-wrap .price-input{
+    width: 1rem;
+    height: 0.4rem;
+    border: 1px solid #efefef;
+}
+.screen .attr-wrap .attr-title-wrap .price-wrap .price-input input{
+    width: 100%;
+    height: 80%;
+    font-size: 0.28rem;
+}
+.screen .attr-wrap .attr-title-wrap .price-wrap .price-line{
+    width: 0.4rem;
+    height: 1px;
+    background-color: #efefef;
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+}
+.screen .attr-wrap .item-wrap{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.screen .attr-wrap .item-wrap .item{
+    width: 30%;
+    height: 0.64rem;
+    background-color: #efefef;
+    text-align: center;
+    line-height: 0.64rem;
+    overflow: hidden;
+    font-size: 0.28rem;
+    border-radius: 0.1rem;
+    margin-left: 2%;
+    margin-right: 1%;
+    margin-bottom: 0.2rem;
+}
+.screen .attr-wrap .item-wrap .item.active{
+    background-color: #fda208;
+    color: #fff;
+}
+.screen .handel-wrap{
+    width: 100%;
+    height: 1rem;
+    background-color: #fff;
+    border-top: 1px solid #efefef;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    display: flex;
+}
+.screen .handel-wrap .item{
+    width: auto;
+    height: 100%;
+    font-size: 0.28rem;
+    text-align: center;
+    line-height: 1rem;
+    flex: 1;
+}
+.screen .handel-wrap .item span{
+    color: #fda208;
+}
+.screen .handel-wrap .item.reset{
+    background-color: #efefef;
+}
+.screen .handel-wrap .item.sure{
+    background-color: #fda208;
+    color: #fff;
 }
 
 </style>
