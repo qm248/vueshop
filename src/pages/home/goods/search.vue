@@ -67,17 +67,17 @@
                         <div class="attr-name">价格区间</div>
                         <div class="price-wrap" @click.stop>
                             <div class="price-input">
-                                <input type="tel" placeholder="最低价" >
+                                <input type="tel" :value="minPrice" placeholder="最低价" @input="SET_MINPRICE({minPrice:$event.target.value})">
                             </div>
                             <div class="price-line"></div>
                             <div class="price-input">
-                                <input type="tel" placeholder="最高价">
+                                <input type="tel" :value="maxPrice" placeholder="最高价" @input="SET_MAXPRICE({maxPrice:$event.target.value})">
                             </div>
                         </div>
-                        <div class="attr-icon"></div>
+                        <div :class="{'attr-icon':true,up:priceData.isHide}"></div>
                     </div>
-                    <div class="item-wrap">
-                        <div :class="{item:true, active:item.active}" v-for="(item,index) in priceData.items" :key="index">{{item.price1}}-{{ item.price2 }}</div>
+                    <div class="item-wrap" v-show="!priceData.isHide">
+                        <div @click="SELECT_PRICE({index:index})" :class="{item:true, active:item.active}" v-for="(item,index) in priceData.items" :key="index">{{item.price1}}-{{ item.price2 }}</div>
                     </div>
                 </div>
                 <div style="width:100%;height: 0.3rem; background-color: #efefef;"></div>
@@ -100,7 +100,7 @@ import {mapState, mapActions,mapMutations} from 'vuex';
         name: "goods-search",
         data(){
             return{
-                keyword:this.$route.keyword?this.$route.keyword:"",
+                keyword:this.$route.query.keyword?this.$route.query.keyword:"",
                 searchShow:{
                     show:false
                 },
@@ -122,6 +122,8 @@ import {mapState, mapActions,mapMutations} from 'vuex';
             ...mapState({
                 classifys:state=>state.goods.classifys,
                 priceData:state=>state.search.priceData,
+                minPrice:state=>state.search.minPrice,
+                maxPrice:state=>state.search.maxPrice,
             })
         },
         created(){
@@ -147,9 +149,12 @@ import {mapState, mapActions,mapMutations} from 'vuex';
             }),
             ...mapMutations({
                 HIDE_PRICE:"search/HIDE_PRICE",
+                SELECT_PRICE:'search/SELECT_PRICE',
+                SET_MAXPRICE:'search/SET_MAXPRICE',
+                SET_MINPRICE:'search/SET_MINPRICE',
             }),
             selectPrice(){
-                this.isSalesOrder = false;
+                // this.isSalesOrder = false;
                 this.isPriceOrder = !this.isPriceOrder;
             },
             selectPriceOrder(index){
