@@ -16,7 +16,7 @@
             <div class="bin" @click="clearHistoryKeywords()"></div>
         </div>
         <div class="search-keywords-wrap">
-            <div class="keywords" v-for="(item,index) in historyKeywords" :key="index">{{ item }}</div>
+            <div class="keywords" v-for="(item,index) in historyKeywords" :key="index"  @click="goSearch(item)">{{ item }}</div>
         </div>
     </div>
     <div class='search-main'>
@@ -24,7 +24,7 @@
                 <div class='search-title'>热门搜索</div>
             </div>
             <div class='search-keywords-wrap'>
-                <div class='keywords' v-for="(item,index) in hotkeywords" :key="index">{{item.title}}</div>               
+                <div class='keywords' v-for="(item,index) in hotkeywords" :key="index"  @click="goSearch(item.title)">{{item.title}}</div>               
 
             </div>
         </div>
@@ -46,6 +46,10 @@ export default {
             type:Object,
             default:{}
         },
+        isLocal:{
+            type:Boolean,
+            default:false,
+        }
     },
     created(){
         this.keywords =this.historyKeywords? this.historyKeywords : [];    
@@ -78,7 +82,13 @@ export default {
                     this.keywords.unshift(tmpKeyword);
                     this.SET_KEYWORDS({historyKeywords:this.keywords})
                 }
-                this.$router.push("/goods/search?keyword="+tmpKeyword)
+                this.show.show = false;
+                if(this.isLocal){
+                    this.$router.replace("/goods/search?keyword=" + tmpKeyword)
+                }else{
+                    this.$router.push("/goods/search?keyword="+tmpKeyword)
+                }
+                
             },
         clearHistoryKeywords(){
             Dialog.confirm({

@@ -1,3 +1,4 @@
+import Vue from "vue"
 import { getHotKeywordData }from '../../../api/search'
 
 export default {
@@ -27,6 +28,20 @@ export default {
                 }
                 
             })
+        },
+        selectClassify(conText,payload){
+            if(conText.rootState.goods.classifys.length>0){
+                for(let i=0; i<conText.rootState.goods.classifys.length;i++){
+                    if(i !== payload.index){
+                        if(conText.rootState.goods.classifys[i].active){
+                            conText.rootState.goods.classifys[i].active=false;
+                            break;
+                        }
+                    } 
+                }
+                conText.rootState.goods.classifys[payload.index].active=!conText.rootState.goods.classifys[payload.index].active;
+                Vue.set(conText.rootState.goods.classifys,payload.index,conText.rootState.goods.classifys[payload.index])
+            }
         }
 
     }

@@ -2,20 +2,23 @@
     <div class="page">
         <div class="search-top">
             <div class="search-header">
-                <div class="back"></div>
-                <div class="search-warp">
+                <div class="back" @click="$router.go(-1)"></div>
+                <div class="search-warp" @click="searchShow.show=true">
                     <div class="search-icon"></div>
-                    <div class="search-text">大码女装</div>
+                    <div class="search-text">{{ keyword }}</div>
                 </div>
-                <div class="screen-btn">筛选</div>
+                <div class="screen-btn" @click="isScreen=true">筛选</div>
             </div>
             <div class="order-main">
-                <div class="order-item active">
+                <div :class="{'order-item':true ,active:isPriceOrder}" @click="selectPrice()">
                     <div class="order-text">综合</div>
                     <div class="order-icon"></div>
-                    <!-- <ul class="order-menu">
-                        <li class="">综合</li>
-                    </ul> -->
+                    <ul class="order-menu" v-show="isPriceOrder">
+                        <li :class="{active:item.active}" v-for="(item,index) in priceOrderList" :key="index" @click="selectPriceOrder(index)">{{ item.title }}</li>
+                    </ul>
+                </div>
+                <div :class="{'order-item':true ,active:isSalesOrder}" @click="selectSales()">
+                    <div class="order-text">销量</div>                    
                 </div>
             </div>
         </div>
@@ -46,16 +49,16 @@
             </div>
             <div class="no-data">没有相关商品！</div>
         </div>
-        <div class="mask"></div>
-        <div class="screen move">
+        <div class="mask" v-show="isScreen" @click="isScreen=false"></div>
+        <div ref="screen" :class="isScreen ? 'screen move':'screen unmove'">
             <div>
                 <div class="attr-wrap">
-                    <div class="attr-title-wrap">
+                    <div class="attr-title-wrap" @click="isClassify=!isClassify">
                         <div class="attr-name">分类</div>
-                        <div class="attr-icon"></div>
+                        <div :class="{'attr-icon':true,up:isClassify }"></div>
                     </div>
-                    <div class="item-wrap">
-                        <div class="item active">潮流女装</div>
+                    <div class="item-wrap" v-show="!isClassify">
+                        <div @click="selectClassify({index:index})" :class="{item:true, active:item.active}" v-for="(item,index) in classifys" :key="index">{{ item.title }}</div>
                     </div>
                 </div>
                 <div style="width:100%;height: 1px;background-color: #efefef;"></div>
@@ -85,17 +88,112 @@
                 <div class="item sure">确定</div>
             </div>
         </div>
+        <my-search :show="searchShow" :isLocal="true"></my-search>
     </div>
 </template>
 
 <script>
+import MySearch from "../../../components/search"
+import IScroll from '../../../assets/js/libs/iscroll';
+import {mapState, mapActions} from 'vuex';
     export default {
         name: "goods-search",
         data(){
             return{
-                keyword:this.$route.keyword?this.$route.keyword:""
+                keyword:this.$route.keyword?this.$route.keyword:"",
+                searchShow:{
+                    show:false
+                },
+                isScreen:false,
+                isPriceOrder:false,
+                priceOrderList:[
+                    {otype:"all",title:"综合",active:true},
+                    {otype:"up",title:"价格从低到高",active:false},
+                    {otype:"down",title:"价格从高到底",active:false},
+                ],
+                isSalesOrder:false,
+                isClassify:false,
             }
         },
+        components:{
+            MySearch,
+        },
+        computed:{
+            ...mapState({
+                classifys:state=>state.goods.classifys,
+            })
+        },
+        created(){
+            this.otype="all";  
+            this.getClassify({success:()=>{
+                this.$nextTick(()=>{
+                    this.myScroll.refresh();
+                })
+            }});        
+        },
+        mounted(){
+            this.$refs['screen'].addEventListener('touchmove',this.disableScreenTouchmove);
+            this.myScroll=new IScroll(this.$refs['screen'], {
+                scrollX : false,
+                scrollY : true,
+                preventDefault : false
+            });
+        },
+        methods:{
+            ...mapActions({
+                getClassify:"goods/getClassify",
+                selectClassify:"search/selectClassify"
+            }),
+            selectPrice(){
+                this.isSalesOrder = false;
+                this.isPriceOrder = !this.isPriceOrder;
+            },
+            selectPriceOrder(index){
+                if(this.priceOrderList.length>0){
+                    for(let i=0; i<this.priceOrderList.length;i++){
+                        if(this.priceOrderList[i].active){
+                            this.priceOrderList[i].active=false;
+                            break;
+                        }
+                    }
+                }
+                this.priceOrderList[index].active=true;
+                this.$set(this.priceOrderList,index,this.priceOrderList[index])
+                this.isSalesOrder = false;
+            },
+            selectSales(){
+                this.isSalesOrder = true;
+                this.isPriceOrder = false;
+                for(let i=0; i<this.priceOrderList.length;i++){
+                    if(this.priceOrderList[i].active){
+                        this.priceOrderList[i].active=false;
+                        break;
+                    }
+                }
+            },
+            disableScreenTouchmove(e){
+                e.preventDefault();//禁用touchmove事件
+            }
+        },
+        beforeRouteUpdate(to,from,next){
+            this.keyword = to.query.keyword;
+            this.isPriceOrder = false;
+            if(this.priceOrderList.length>0){
+                for(let i=0; i<this.priceOrderList.length;i++){
+                    if(this.priceOrderList[i].active){
+                        this.priceOrderList[i].active=false;
+                        break;
+                    }
+                }
+            }
+            this.priceOrderList[0].active = true;
+            this.otype='all';
+            this.isSalesOrder = false;
+            next();
+        },
+        beforeDestroy(){
+            this.$refs['screen'].removeEventListener('touchmove',this.disableScreenTouchmove)
+        }
     }
 </script>
 

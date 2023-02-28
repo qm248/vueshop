@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="search-header">
+        <div class="search-header" @click="searchShow.show = true">
             <div class="back" @click="goBack()"></div>
             <div class="search">请输入宝贝名称</div>
         </div>
@@ -15,18 +15,25 @@
                 <router-view></router-view>
             </div>
         </div>
+        <my-search :show="searchShow"></my-search>
     </div>
   
 </template>
 
 <script>
 import IScroll from '../../../assets/js/libs/iscroll';
+import MySearch from '../../../components/search/index.vue'
 import { mapActions , mapState , mapMutations} from 'vuex'
     export default {
         data(){
             return{
-
+                searchShow:{
+                    show:false,
+                }
             }
+        },
+        components:{
+            MySearch,
         },
         methods:{
             ...mapActions({
