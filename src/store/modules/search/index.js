@@ -6,6 +6,17 @@ export default {
     state:{
         historyKeywords:localStorage['historyKeywords']?JSON.parse(localStorage['historyKeywords']):[],
         hotkeywords:[],
+        priceData:{
+            isHide:false,
+            items:[
+                {price1:1,price2:50,active:false},
+                {price1:51,price2:99,active:false},
+                {price1:100,price2:300,active:false},
+                {price1:301,price2:1000,active:false},
+                {price1:1001,price2:4000,active:false},
+                {price1:4001,price2:9999,active:false},
+            ]
+        }
     },
     mutations:{
         ['SET_KEYWORDS'](state,payload){
@@ -18,7 +29,11 @@ export default {
         },
         ['SET_HOTKEYWORDS'](state,payload){
             state.hotkeywords = payload.hotkeywords;
+        },
+        ['HIDE_PRICE'](state,payload){
+            state.priceData.isHide = !state.priceData.isHide;
         }
+
     },
     actions:{
         getHotKeywords(conText,payload){

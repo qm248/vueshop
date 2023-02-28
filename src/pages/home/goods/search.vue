@@ -61,13 +61,13 @@
                         <div @click="selectClassify({index:index})" :class="{item:true, active:item.active}" v-for="(item,index) in classifys" :key="index">{{ item.title }}</div>
                     </div>
                 </div>
-                <div style="width:100%;height: 1px;background-color: #efefef;"></div>
+                <div style="width:100%;height: 1px;background-color:#efefef;"></div>
                 <div class="attr-wrap">
-                    <div class="attr-title-wrap">
+                    <div class="attr-title-wrap" @click="HIDE_PRICE()">
                         <div class="attr-name">价格区间</div>
-                        <div class="price-wrap">
+                        <div class="price-wrap" @click.stop>
                             <div class="price-input">
-                                <input type="tel" placeholder="最低价">
+                                <input type="tel" placeholder="最低价" >
                             </div>
                             <div class="price-line"></div>
                             <div class="price-input">
@@ -77,7 +77,7 @@
                         <div class="attr-icon"></div>
                     </div>
                     <div class="item-wrap">
-                        <div class="item active">1-50</div>
+                        <div :class="{item:true, active:item.active}" v-for="(item,index) in priceData.items" :key="index">{{item.price1}}-{{ item.price2 }}</div>
                     </div>
                 </div>
                 <div style="width:100%;height: 0.3rem; background-color: #efefef;"></div>
@@ -95,7 +95,7 @@
 <script>
 import MySearch from "../../../components/search"
 import IScroll from '../../../assets/js/libs/iscroll';
-import {mapState, mapActions} from 'vuex';
+import {mapState, mapActions,mapMutations} from 'vuex';
     export default {
         name: "goods-search",
         data(){
@@ -121,6 +121,7 @@ import {mapState, mapActions} from 'vuex';
         computed:{
             ...mapState({
                 classifys:state=>state.goods.classifys,
+                priceData:state=>state.search.priceData,
             })
         },
         created(){
@@ -143,6 +144,9 @@ import {mapState, mapActions} from 'vuex';
             ...mapActions({
                 getClassify:"goods/getClassify",
                 selectClassify:"search/selectClassify"
+            }),
+            ...mapMutations({
+                HIDE_PRICE:"search/HIDE_PRICE",
             }),
             selectPrice(){
                 this.isSalesOrder = false;
