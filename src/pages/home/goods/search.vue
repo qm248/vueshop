@@ -23,31 +23,15 @@
             </div>
         </div>
         <div class="goods-main">
-            <div class="goods-list">
-                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
+            <div class="goods-list" v-for="(item,index) in searchData" :key="index">
+                <div class="image"><img :src="item.image" alt=""></div>
                 <div class="goods-content">
-                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
-                    <div class="goods-price">$13800</div>
-                    <div class="sales">销量<span>0</span>件</div>
+                    <div class="goods-title">{{item.title}}</div>
+                    <div class="goods-price">${{ item.price }}</div>
+                    <div class="sales">销量<span>{{ item.sales }}</span>件</div>
                 </div>
             </div>
-            <div class="goods-list">
-                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
-                <div class="goods-content">
-                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
-                    <div class="goods-price">$13800</div>
-                    <div class="sales">销量<span>0</span>件</div>
-                </div>
-            </div>
-            <div class="goods-list">
-                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524561138.jpg" alt=""></div>
-                <div class="goods-content">
-                    <div class="goods-title">联想华硕神舟笔记本贴膜15.6 戴尔宏基HP外壳保护膜电脑贴纸14寸</div>
-                    <div class="goods-price">$13800</div>
-                    <div class="sales">销量<span>0</span>件</div>
-                </div>
-            </div>
-            <div class="no-data">没有相关商品！</div>
+            <div class="no-data" v-show="searchData.length<=0">没有相关商品！</div>
         </div>
         <div class="mask" v-show="isScreen" @click="isScreen=false"></div>
         <div ref="screen" :class="isScreen ? 'screen move':'screen unmove'">
@@ -124,6 +108,8 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 priceData:state=>state.search.priceData,
                 minPrice:state=>state.search.minPrice,
                 maxPrice:state=>state.search.maxPrice,
+                attrs:state=>state.search.attrs,
+                searchData:state=>state.search.searchData,
             })
         },
         created(){
@@ -132,7 +118,9 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 this.$nextTick(()=>{
                     this.myScroll.refresh();
                 })
-            }});        
+            }});   
+            this.getSearch({kwords:this.keyword});
+            this.getAttrs({keyword:this.keyword})
         },
         mounted(){
             this.$refs['screen'].addEventListener('touchmove',this.disableScreenTouchmove);
@@ -145,7 +133,9 @@ import {mapState, mapActions,mapMutations} from 'vuex';
         methods:{
             ...mapActions({
                 getClassify:"goods/getClassify",
-                selectClassify:"search/selectClassify"
+                selectClassify:"search/selectClassify",
+                getSearch:"search/getSearch",
+                getAttrs:"search/getAttrs"
             }),
             ...mapMutations({
                 HIDE_PRICE:"search/HIDE_PRICE",
@@ -154,7 +144,6 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 SET_MINPRICE:'search/SET_MINPRICE',
             }),
             selectPrice(){
-                // this.isSalesOrder = false;
                 this.isPriceOrder = !this.isPriceOrder;
             },
             selectPriceOrder(index){

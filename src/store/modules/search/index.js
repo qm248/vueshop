@@ -1,5 +1,5 @@
 import Vue from "vue"
-import { getHotKeywordData }from '../../../api/search'
+import { getHotKeywordData,getSearchData ,getAttrsData}from '../../../api/search'
 
 export default {
     namespaced:true,
@@ -19,6 +19,8 @@ export default {
         },
         minPrice:"",
         maxPrice:"",
+        attrs:[],
+        searchData:[],
 
     },
     mutations:{
@@ -62,6 +64,13 @@ export default {
         ['SET_MAXPRICE'](state,payload){
             state.maxPrice=payload.maxPrice;
             state.maxPrice=state.minPrice.replace(/[^\d|\.]/g,'')
+        },
+        ['SET_ATTRS'](state,payload){
+            state.attrs = payload.attrs;
+        },
+        //设置搜索结果
+        ['SET_SEARCH_DATA'](state,payload){
+            state.searchData = payload.searchData;
         }
 
     },
@@ -87,6 +96,37 @@ export default {
                 conText.rootState.goods.classifys[payload.index].active=!conText.rootState.goods.classifys[payload.index].active;
                 Vue.set(conText.rootState.goods.classifys,payload.index,conText.rootState.goods.classifys[payload.index])
             }
+        },
+        //获取商品搜索结果
+        getSearch(conText,payload){
+            getSearchData(payload).then(res=>{
+                if(res.code==200){
+                    conText.commit('SET_SEARCH_DATA',{searchData:res.data});
+                }else{
+                    conText.commit('SET_SEARCH_DATA',{searchData:[]});
+                }
+                if(payload && payload.success){
+                    payload.success();
+                }
+            })
+        },
+        getAttrs(conText,payload){
+            getAttrsData(payload.keyword).then(res=>{
+                if(res.code===200){
+                    for(let i =0; i<res.data.length;i++){
+                        res.data[i].isHide =  false;
+                        for(let j=0; j<res.data[i].param.length;j++){
+                            res.data[i].param[j].active=false;
+                        }
+                    }
+                    conText.commit('SET_ATTRS',{attrs:res.data});
+                }else{
+                    conText.commit('SET_ATTRS',{attrs:[]});
+                }       
+                if(payload.success){
+                    payload.success();
+                }  
+            })
         }
 
     }
