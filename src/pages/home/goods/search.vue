@@ -24,7 +24,7 @@
         </div>
         <div class="goods-main">
             <div class="goods-list" v-for="(item,index) in searchData" :key="index">
-                <div class="image"><img :src="item.image" alt=""></div>
+                <div class="image"><img src="../../../assets/images/common/lazyImg.jpg" :data-echo="item.image" alt=""></div>
                 <div class="goods-content">
                     <div class="goods-title">{{item.title}}</div>
                     <div class="goods-price">${{ item.price }}</div>
@@ -79,6 +79,7 @@
 <script>
 import MySearch from "../../../components/search"
 import IScroll from '../../../assets/js/libs/iscroll';
+import UpRefresh from '../../../assets/js/libs/uprefresh';
 import {mapState, mapActions,mapMutations} from 'vuex';
     export default {
         name: "goods-search",
@@ -114,12 +115,13 @@ import {mapState, mapActions,mapMutations} from 'vuex';
         },
         created(){
             this.otype="all";  
+            this.pullUp=new UpRefresh();
             this.getClassify({success:()=>{
                 this.$nextTick(()=>{
                     this.myScroll.refresh();
                 })
             }});   
-            this.getSearch({kwords:this.keyword});
+            this.init();
             this.getAttrs({keyword:this.keyword})
         },
         mounted(){
@@ -135,7 +137,8 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 getClassify:"goods/getClassify",
                 selectClassify:"search/selectClassify",
                 getSearch:"search/getSearch",
-                getAttrs:"search/getAttrs"
+                getAttrs:"search/getAttrs",
+                getSearchPage:'search/getSearchPage'
             }),
             ...mapMutations({
                 HIDE_PRICE:"search/HIDE_PRICE",
@@ -158,6 +161,8 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 this.priceOrderList[index].active=true;
                 this.$set(this.priceOrderList,index,this.priceOrderList[index])
                 this.isSalesOrder = false;
+                this.otype=this.priceOrderList[index].otype;
+                this.init()
             },
             selectSales(){
                 this.isSalesOrder = true;
@@ -171,7 +176,18 @@ import {mapState, mapActions,mapMutations} from 'vuex';
             },
             disableScreenTouchmove(e){
                 e.preventDefault();//禁用touchmove事件
-            }
+            },
+            init(){
+                let jsonParams={keyword:this.keyword,otype:this.otype,cid:this.cid,price1:this.minPrice,price2:this.maxPrice,param:JSON.stringify(this.params)};
+                this.getSearch({...jsonParams,success:(pageNum)=>{
+                        this.$nextTick(()=>{
+                            this.$utils.lazyImg();
+                        });
+                        this.pullUp.init({"curPage":1,"maxPage":parseInt(pageNum),"offsetBottom":100},(page)=>{
+                            this.getSearchPage({...jsonParams,page:page});
+                        });
+                    }});
+            },
         },
         beforeRouteUpdate(to,from,next){
             this.keyword = to.query.keyword;
@@ -187,6 +203,7 @@ import {mapState, mapActions,mapMutations} from 'vuex';
             this.priceOrderList[0].active = true;
             this.otype='all';
             this.isSalesOrder = false;
+            this.init()
             next();
         },
         beforeDestroy(){

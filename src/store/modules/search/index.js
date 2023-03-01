@@ -71,6 +71,14 @@ export default {
         //设置搜索结果
         ['SET_SEARCH_DATA'](state,payload){
             state.searchData = payload.searchData;
+        },
+        //增加分页s数据
+        ['SET_SEARCH_DATA_PAGE'](state,payload){
+            if(payload.searchData.length>0){
+                for(let i=0; i<payload.searchData.length;i++){
+                    state.searchData.push(payload.searchData[i])
+                }
+            }
         }
 
     },
@@ -102,12 +110,23 @@ export default {
             getSearchData(payload).then(res=>{
                 if(res.code==200){
                     conText.commit('SET_SEARCH_DATA',{searchData:res.data});
+                    if(payload.success){
+                        payload.success(res);
+                    }
                 }else{
                     conText.commit('SET_SEARCH_DATA',{searchData:[]});
                 }
-                if(payload && payload.success){
-                    payload.success();
+              
+            })
+        },
+         //获取商品分页搜索
+         getSearchPage(conText,payload){
+            getSearchData(payload).then(res=>{
+                console.log(res);
+                if(res.code==200){
+                    conText.commit('SET_SEARCH_DATA_PAGE',{searchData:res.data});
                 }
+              
             })
         },
         getAttrs(conText,payload){
