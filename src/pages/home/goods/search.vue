@@ -65,11 +65,22 @@
                     </div>
                 </div>
                 <div style="width:100%;height: 0.3rem; background-color: #efefef;"></div>
+                <div>
+                    <div class="attr-wrap" v-for="(item,index) in attrs" :key="index">
+                        <div class="attr-title-wrap"  @click="HIDE_ATRR({index:index})">
+                            <div class="attr-name">{{item.title}}</div>
+                            <div :class="{'attr-icon':true,up:item.isHide}"></div>
+                        </div>
+                        <div class="item-wrap" v-show="!item.isHide">
+                            <div :class="{item:true, active:item2.active}" v-for="(item2,index2) in item.param" :key="index2" @click="SELECT_ATTR({index:index,index2:index2})">{{item2.title}}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="handel-wrap">
                 <div class="item">共<span>18</span>件</div>
                 <div class="item reset">全部重置</div>
-                <div class="item sure">确定</div>
+                <div class="item sure" @click="submit()">确定</div>
             </div>
         </div>
         <my-search :show="searchShow" :isLocal="true"></my-search>
@@ -111,6 +122,7 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 maxPrice:state=>state.search.maxPrice,
                 attrs:state=>state.search.attrs,
                 searchData:state=>state.search.searchData,
+                cid:state=>state.search.cid,
             })
         },
         created(){
@@ -122,7 +134,11 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 })
             }});   
             this.init();
-            this.getAttrs({keyword:this.keyword})
+            this.getAttrs({keyword:this.keyword,success:()=>{
+                this.$nextTick(()=>{
+                    this.myScroll.refresh();
+                })
+            }})
         },
         mounted(){
             this.$refs['screen'].addEventListener('touchmove',this.disableScreenTouchmove);
@@ -138,13 +154,18 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 selectClassify:"search/selectClassify",
                 getSearch:"search/getSearch",
                 getAttrs:"search/getAttrs",
-                getSearchPage:'search/getSearchPage'
+                getSearchPage:'search/getSearchPage',
+                getAttrs:"search/getAttrs",
             }),
             ...mapMutations({
                 HIDE_PRICE:"search/HIDE_PRICE",
                 SELECT_PRICE:'search/SELECT_PRICE',
                 SET_MAXPRICE:'search/SET_MAXPRICE',
                 SET_MINPRICE:'search/SET_MINPRICE',
+                HIDE_ATRR:"search/HIDE_ATRR",
+                SELECT_ATTR:"search/SELECT_ATTR",
+                SET_PARAMS:"search/SET_PARAMS",
+
             }),
             selectPrice(){
                 this.isPriceOrder = !this.isPriceOrder;
@@ -188,6 +209,11 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                         });
                     }});
             },
+            submit(){
+                this.isScreen=false;
+                this.SET_PARAMS();
+                this.init();
+            }
         },
         beforeRouteUpdate(to,from,next){
             this.keyword = to.query.keyword;
@@ -204,6 +230,11 @@ import {mapState, mapActions,mapMutations} from 'vuex';
             this.otype='all';
             this.isSalesOrder = false;
             this.init()
+            this.getAttrs({keyword:this.keyword,success:()=>{
+                this.$nextTick(()=>{
+                    this.myScroll.refresh();
+                })
+            }})
             next();
         },
         beforeDestroy(){

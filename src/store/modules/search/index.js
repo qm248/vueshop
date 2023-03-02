@@ -21,6 +21,9 @@ export default {
         maxPrice:"",
         attrs:[],
         searchData:[],
+        cid:"",
+        params:[],
+
 
     },
     mutations:{
@@ -65,6 +68,15 @@ export default {
             state.maxPrice=payload.maxPrice;
             state.maxPrice=state.minPrice.replace(/[^\d|\.]/g,'')
         },
+        ['HIDE_ATRR'](state,payload){
+            state.attrs[payload.index].isHide = !state.attrs[payload.index].isHide;
+            Vue.set(state.attrs,payload.index,state.attrs[payload.index])
+        },
+        //选择商品属性
+        ['SELECT_ATTR'](state,payload){
+            state.attrs[payload.index].param[payload.index2].active=!state.attrs[payload.index].param[payload.index2].active;
+            Vue.set(state.attrs[payload.index].param,payload.index2,state.attrs[payload.index].param[payload.index2])
+        },
         ['SET_ATTRS'](state,payload){
             state.attrs = payload.attrs;
         },
@@ -72,11 +84,28 @@ export default {
         ['SET_SEARCH_DATA'](state,payload){
             state.searchData = payload.searchData;
         },
-        //增加分页s数据
+        //增加分页数据
         ['SET_SEARCH_DATA_PAGE'](state,payload){
             if(payload.searchData.length>0){
                 for(let i=0; i<payload.searchData.length;i++){
                     state.searchData.push(payload.searchData[i])
+                }
+            }
+        },
+        //设置cid
+        ['SET_CID'](state,payload){
+            state.cid = payload.cid;
+        },
+        //设置属性的值
+        ['SET_PARAMS'](state,payload){
+            if(state.attrs.length>0){
+                state.params = [];
+                for (let i = 0; i < state.attrs.length; i++) {
+                    for(let j=0; j<state.attrs[i].param.length;j++){
+                        if(state.attrs[i].param[j].active){
+                            state.params.push(state.attrs[i].param[j].pid);
+                        }
+                    }
                 }
             }
         }
@@ -103,6 +132,8 @@ export default {
                 }
                 conText.rootState.goods.classifys[payload.index].active=!conText.rootState.goods.classifys[payload.index].active;
                 Vue.set(conText.rootState.goods.classifys,payload.index,conText.rootState.goods.classifys[payload.index])
+                let cid = conText.rootState.goods.classifys[payload.index].active?conText.rootState.goods.classifys[payload.index].cid:"";
+                conText.commit('SET_CID',{cid:cid});
             }
         },
         //获取商品搜索结果
@@ -126,11 +157,12 @@ export default {
                 if(res.code==200){
                     conText.commit('SET_SEARCH_DATA_PAGE',{searchData:res.data});
                 }
-              
             })
         },
         getAttrs(conText,payload){
             getAttrsData(payload.keyword).then(res=>{
+                console.log(res);
+                
                 if(res.code===200){
                     for(let i =0; i<res.data.length;i++){
                         res.data[i].isHide =  false;
