@@ -108,8 +108,32 @@ export default {
                     }
                 }
             }
+        },
+        ['RESET_SCREEN'](state){
+            state.cid="";
+            //价格
+            if(state.priceData.items.length>0){
+                for (let i = 0; i < state.priceData.items.length; i++) {
+                   if(state.priceData.items[i].active){
+                    state.priceData.items[i].active=false;
+                    break;
+                   }
+                }
+                state.minPrice="";
+                state.maxPrice ="";
+            }
+            //属性
+            if(state.attrs.length>0){
+                for (let i = 0; i < state.attrs.length; i++) {
+                for (let j = 0; j < state.attrs[i].param.length; j++) {
+                        if(state.attrs[i].param[j].active){
+                            state.attrs[i].param[j].active=false;
+                        }
+                }
+                }
+                state.params=[];
+            }
         }
-
     },
     actions:{
         getHotKeywords(conText,payload){
@@ -160,9 +184,7 @@ export default {
             })
         },
         getAttrs(conText,payload){
-            getAttrsData(payload.keyword).then(res=>{
-                console.log(res);
-                
+            getAttrsData(payload.keyword).then(res=>{  
                 if(res.code===200){
                     for(let i =0; i<res.data.length;i++){
                         res.data[i].isHide =  false;
@@ -178,8 +200,18 @@ export default {
                     payload.success();
                 }  
             })
+        },
+        resetScreen(conText){
+            if(conText.rootState.goods.classifys.length>0){
+                for (let i = 0; i < conText.rootState.goods.classifys.length; i++) {
+                    if(conText.rootState.goods.classifys[i].active){
+                        conText.rootState.goods.classifys.active=false;
+                        break;
+                    }
+                }
+            }
+            conText.commit('RESET_SCREEN');
         }
-
     }
     
 }

@@ -79,7 +79,7 @@
             </div>
             <div class="handel-wrap">
                 <div class="item">共<span>18</span>件</div>
-                <div class="item reset">全部重置</div>
+                <div class="item reset" @click="resetScreen()">全部重置</div>
                 <div class="item sure" @click="submit()">确定</div>
             </div>
         </div>
@@ -156,6 +156,7 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 getAttrs:"search/getAttrs",
                 getSearchPage:'search/getSearchPage',
                 getAttrs:"search/getAttrs",
+                resetScreen:"search/resetScreen",
             }),
             ...mapMutations({
                 HIDE_PRICE:"search/HIDE_PRICE",
@@ -165,7 +166,6 @@ import {mapState, mapActions,mapMutations} from 'vuex';
                 HIDE_ATRR:"search/HIDE_ATRR",
                 SELECT_ATTR:"search/SELECT_ATTR",
                 SET_PARAMS:"search/SET_PARAMS",
-
             }),
             selectPrice(){
                 this.isPriceOrder = !this.isPriceOrder;

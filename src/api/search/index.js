@@ -15,7 +15,6 @@ export function getSearchData(data){
     let price2 = data.price2?data.price2:"";
     let param = data.param && data.param!=='[]'? data.param :"";
     let url = config.baseApi+'/home/goods/search?kwords='+kwords+"&param="+param+"&page="+page+"&price1="+price1+"&price2="+price2+"&otype="+otype+"&cid="+cid+"&token="+config.token;
-    console.log(url);
 
     return request(url);
 }
