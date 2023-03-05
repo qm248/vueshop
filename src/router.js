@@ -47,11 +47,11 @@ let router=new Router({
             component:()=>import("./pages/home/login"),
             meta:{keepAlive:false}
         },
-        {
-            path:"/ucenter",
-            name:"ucenter",
-            component:()=>import("./pages/user/ucenter")
-        },
+        // {
+        //     path:"/ucenter",
+        //     name:"ucenter",
+        //     component:()=>import("./pages/user/ucenter")
+        // },
         {
             path:"/goods/classify",
             name:"goods-classify",
@@ -67,24 +67,6 @@ let router=new Router({
             ]
         },
         {
-            path:"/goods",
-            name:"goods",
-            component:()=>import("./pages/home/goods"),
-            redirect:"/goods/item",//页面重定向
-            children:[
-                {
-                    path:"details",
-                    name:"goods-details",
-                    component:()=>import("./pages/home/goods/details")
-                },
-                {
-                    path:"review",
-                    name:"goods-review",
-                    component:()=>import("./pages/home/goods/review")
-                }
-            ]
-        },
-        {
             path:"/skip",
             name:"skip",
             component:()=>import("./pages/skip")
@@ -93,7 +75,30 @@ let router=new Router({
             path:'/goods/search',
             name:"goods-search",
             component:()=>import('./pages/home/goods/search')
-        }
+        },
+        {
+            path:"/goods/details",
+            name:"goods-details",
+            component:()=>import("./pages/home/goods/details"),
+            redirect:"/goods/details/item",
+            children:[
+                {
+                    path:"item",
+                    name:"goods-item",
+                    component:()=>import("./pages/home/goods/details_item")
+                },
+                {
+                    path:"content",
+                    name:"goods-content",
+                    component:()=>import("./pages/home/goods/details_content")
+                },
+                {
+                    path:"review",
+                    name:"goods-review",
+                    component:()=>import("./pages/home/goods/details_review")
+                }
+            ]
+        },
     ]
 });
 router.beforeEach((to,from,next)=>{
