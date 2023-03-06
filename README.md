@@ -30,8 +30,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 //http://vueshop.glbuys.com/#/index  真实网址
 
-git:git config --global unset http.proxy
-git:git config --global unset https.proxy //撤销代理 pull代码报错443的时候用
+git:git config --global --unset http.proxy
+git:git config --global --unset https.proxy //撤销代理 pull代码报错443的时候用
 
 cmd:ipconfig/flushdns //刷新dns解析缓存
 
