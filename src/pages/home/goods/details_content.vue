@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-       fggh
+        <div class="content" v-html="$store.state.goods.details.bodys"></div>
     </div>
 </template>
 
@@ -13,9 +13,13 @@
 <style scoped>
 .page{
     margin-top: 1.2rem;
-    background-color: #fff;
-    width: 100%;
-    height: 1rem;
 }
+.content{
+    width: 90%;
+    margin: 0 auto;
+    font-size: 0.32rem;
+    line-height: 0.5rem;
+}
+
 
 </style>

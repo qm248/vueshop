@@ -3,9 +3,9 @@
         <div class="details-header">
             <div class="back"></div>
             <div class="tab-wrap">
-                <div class="tab-name active">商品</div>
-                <div class="tab-name">详情</div>
-                <div class="tab-name">评价</div>
+                <div class="tab-name active" @click="$router.replace('/goods/details')">商品</div>
+                <div class="tab-name" @click="$router.replace('/goods/details/content')">详情</div>
+                <div class="tab-name" @click="$router.replace('/goods/details/review')">评价</div>
             </div>
             <div class="cart-icon">
                 <div class="spot"></div>

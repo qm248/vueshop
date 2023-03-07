@@ -28,7 +28,7 @@
             <div class="goods-main"  :key="index" v-if="(index+1)%2!==0">
                 <div :class="'classify-name color-'+index">{{item.title}}</div>
                 <div class="goods-row-1">
-                    <div class="goods-column" >
+                    <div class="goods-column" @click="$router.push('/goods/details')">
                         <div class="goods-title">{{ item.items && item.items[0].title}}</div>
                         <div class="goods-tips">精品打折</div>
                         <div class="goods-price bg-color-0">{{ item.items && item.items[0].price}}元</div>
