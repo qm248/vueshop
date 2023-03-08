@@ -1,7 +1,15 @@
 <template>
     <div class="page">
-        <div class="swiper-wrap">
-            <img src="//vueshop.glbuys.com/uploadfiles/1524556419.jpg" alt="">
+        <div class="swiper-wrap swiper-container" ref="swiper-wrap">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img alt="" src="//vueshop.glbuys.com/uploadfiles/1524556419.jpg"></img>
+                </div>
+                <div class="swiper-slide">
+                    <img alt="" src="//vueshop.glbuys.com/uploadfiles/1524556419.jpg"></img>
+                </div>
+            </div>
+            <div class="swiper-pagination" ref="swiper-pagination" ></div>
         </div>
         <div class="goods-ele-main">
             <div class="goods-title">高跟鞋女2018新款春季单鞋仙女甜美链子尖头防水台细跟女鞋一字带</div>
@@ -46,17 +54,17 @@
         </div>
         <div class="bottom-btn-wrap">
             <div class="btn fav">收藏</div>
-            <div class="btn cart">加入购物车</div>
+            <div class="btn cart" @click="showPanel">加入购物车</div>
         </div>
-        <div class="mask" v-show="false"></div>
-        <div class="cart-panel up">
-            <div class="goods-info">
+        <div class="mask" v-show="isPanel" @click="hidePanel"></div>
+        <div :class="isPanel? 'cart-panel up': 'cart-panel down'" ref="cart-panel">
+            <div class="goods-info" ref="goods-info">
                 <div class="close-panel-wrap">
                     <div class="spot"></div>
                     <div class="line"></div>
-                    <div class="close"></div>
+                    <div class="close" @click="hidePanel"></div>
                 </div>
-                <div class="goods-img">
+                <div class="goods-img" ref="goods-img">
                     <img src="//vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt="">
                 </div>
                 <div class="goods-wrap">
@@ -66,34 +74,92 @@
                 </div>
             </div>  
             <div class="attr-wrap">
-                <div class="attr-list">
-                    <div class="attr-name">颜色</div>
+                <div class="attr-list" v-for="(item,index) in attrs" :key="index">
+                    <div class="attr-name">{{item.title}}</div>
                     <div class="val-wrap">
-                        <span class="val active">白色</span>
+                        <span @click="SELECT_ATTR({index:index,index2:index2})" :class="{val:true, active:item2.active}" v-for="(item2,index2) in item.values" :key="index2">{{ item2.value }}</span>
                     </div>
                 </div>
             </div>
             <div class="amount-wrap">   
                 <div class="amount-name">购买数量</div>
                 <div class="amount-input-wrap">
-                    <div class="btn dec active">-</div>
-                    <div class="amount-input"><input type="tel"></div>
-                    <div class="btn inc">+</div>
+                    <div :class="amount>1?'btn dec':'btn dec active'" @click="amount>1?amount--:1">-</div>
+                    <div class="amount-input"><input type="tel" :value="amount"></div>
+                    <div class="btn inc" @click="amount++">+</div>
                 </div>
             </div>
-            <div class="sure-btn">确定</div>
+            <div class="sure-btn" @click="addCart">确定</div>
         </div>
     </div>
 </template>
 
 
 <script>
+    import Swiper from '../../../assets/js/libs/swiper.js';
+    import TweenMax from '../../../assets/js/libs/TweenMax.js';
+    import { mapState ,mapMutations} from 'vuex'
     export default {
-        name: "goods-item"
+        name: "goods-item",
+        data(){
+            return{
+                isPanel:false,
+                amount:1,
+            }
+        },
+        mounted(){
+            new Swiper(this.$refs['swiper-wrap'], {
+                autoplay: 3000,
+                pagination : this.$refs['swiper-pagination'],
+                paginationClickable :true,
+                autoplayDisableOnInteraction : false
+            })
+        },
+        created(){
+            this.isMove=true;
+        },
+        computed:{
+            ...mapState({
+                attrs:(state)=>state.goods.attrs
+            })
+            
+        },
+        methods:{
+            ...mapMutations({
+                SELECT_ATTR:"goods/SELECT_ATTR"
+            }),
+            //显示属性面板
+            showPanel(){
+                this.isPanel = true;
+            },
+            hidePanel(){
+                if(this.isMove){
+                    this.isPanel = false;
+                }
+            },
+            addCart(){
+                if(this.isMove){
+                    this.isMove=false;
+                    let goodsImg= this.$refs['goods-img'],goodsInfo=this.$refs['goods-info']
+                    let cloneImg = goodsImg.cloneNode(true);
+                    let cartIcon=document.getElementById('cart-icon');
+                    cloneImg.style.cssText="position:absolute;z-index:10;left:0.2rem;top:0.2rem;width:0.4rem;height:0.4rem;";
+                    goodsInfo.appendChild(cloneImg);
+                    let cartTop=window.innerHeight-this.$refs['cart-panel'].offsetHeight;
+                    TweenMax.to(cloneImg, 2, {bezier:[{x:cloneImg.offsetLeft, y:-100},{x:cartIcon.offsetLeft, y:-cartTop}],onComplete:()=>{
+                        cloneImg.remove();
+                        this.isMove=true;
+                    }});
+                    TweenMax.to(cloneImg,0.2,{rotation:360,repeat:-1});
+                }
+                
+            }
+        }
     }
 </script>
 
 <style scoped >
+@import url("../../../assets/css/common/swiper.css");
 .swiper-wrap{
     background-color: #fff;
     width: 100%;

@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="details-header">
-            <div class="back"></div>
+            <div class="back" @click="$router.go(-1)"></div>
             <div class="tab-wrap">
-                <div class="tab-name active" @click="$router.replace('/goods/details')">商品</div>
-                <div class="tab-name" @click="$router.replace('/goods/details/content')">详情</div>
-                <div class="tab-name" @click="$router.replace('/goods/details/review')">评价</div>
+                <div :class="{'tab-name':true,active:itemStyle}" @click="$router.replace('/goods/details?gid='+gid)">商品</div>
+                <div :class="{'tab-name':true,active:contentStyle}" @click="$router.replace('/goods/details/content?gid='+gid)">详情</div>
+                <div :class="{'tab-name':true,active:reviewsStyle}" @click="$router.replace('/goods/details/review?gid='+gid)">评价</div>
             </div>
-            <div class="cart-icon">
+            <div id="cart-icon" class="cart-icon">
                 <div class="spot"></div>
             </div>
         </div>
@@ -19,7 +19,48 @@
 
 <script>
     export default {
-        name: "goods-details"
+        name: "goods-details",
+        data(){
+            return{
+                gid:this.$route.query.gid?this.$route.query.gid:"",
+                itemStyle:true,
+                contentStyle:false,
+                reviewsStyle:false
+            }
+        },
+        create(){
+            this.changeTabStyle(this.$route.name);
+        },
+        methods:{
+            changeTabStyle(name){
+                switch (name) {
+                    case 'goods-item':
+                        this.itemStyle=true;
+                        this.contentStyle=false;
+                        this.reviewsStyle=false;
+                        break;
+                    case 'goods-content':
+                        this.itemStyle=false;
+                        this.contentStyle=true;
+                        this.reviewsStyle=false;
+                        break;
+                    case 'goods-review':
+                        this.itemStyle=false;
+                        this.contentStyle=false;
+                        this.reviewsStyle=true;
+                        break;    
+                    default:
+                        this.itemStyle=true;
+                        this.contentStyle=false;
+                        this.reviewsStyle=false;
+                        break;
+                }
+            }
+        },
+        beforeRouteUpdate(to,from,next){
+            this.changeTabStyle(to.name);
+            next();
+        }
     }
 </script>
 

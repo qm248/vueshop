@@ -4,7 +4,7 @@
             <div class="goods-wrap" v-for="(item,index) in goods" :key="index" >
                 <div class="classify-name">{{ item.title }} </div>
                 <div class="goods-items-wrap">
-                    <ul v-for="(item2,index2) in item.goods" :key="index2">
+                    <ul v-for="(item2,index2) in item.goods" :key="index2" @click="$router.push('/goods/details?gid='+item2.gid)">
                         <li><img src="../../../assets/images/common/lazyImg.jpg" :data-echo="item2.image"/> </li>
                         <li>{{ item2.title }}</li>
                     </ul>
