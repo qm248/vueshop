@@ -2,21 +2,18 @@
     <div class="page">
         <div class="swiper-wrap swiper-container" ref="swiper-wrap">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img alt="" src="//vueshop.glbuys.com/uploadfiles/1524556419.jpg"></img>
-                </div>
-                <div class="swiper-slide">
-                    <img alt="" src="//vueshop.glbuys.com/uploadfiles/1524556419.jpg"></img>
+                <div class="swiper-slide" v-for="(item,index) in details.images" :key="index">
+                    <img alt="" :src="item"/>
                 </div>
             </div>
             <div class="swiper-pagination" ref="swiper-pagination" ></div>
         </div>
         <div class="goods-ele-main">
-            <div class="goods-title">高跟鞋女2018新款春季单鞋仙女甜美链子尖头防水台细跟女鞋一字带</div>
-            <div class="price">$12.8</div>
+            <div class="goods-title">{{ details.title }}</div>
+            <div class="price">${{ details.price }}</div>
             <div class="sales-wrap">
-                <span>快递20元</span>
-                <span>月销量300件</span>
+                <span>快递{{details.freight}}元</span>
+                <span>月销量{{details.sales}}件</span>
             </div>
         </div>
         <div class="reviews-main">
@@ -65,12 +62,12 @@
                     <div class="close" @click="hidePanel"></div>
                 </div>
                 <div class="goods-img" ref="goods-img">
-                    <img src="//vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt="">
+                    <img :src="details.images && details.images[0]" alt="">
                 </div>
                 <div class="goods-wrap">
-                    <div class="goods-title">高跟鞋女2018新款春季单鞋仙女甜美链子尖头防水台细跟女鞋一字带</div>
-                    <div class="price">$128</div>
-                    <div class="goods-code">商品编号:157121234</div>
+                    <div class="goods-title">{{ details.title }}</div>
+                    <div class="price">${{ details.price }}</div>
+                    <div class="goods-code">商品编号:{{details.gid}}</div>
                 </div>
             </div>  
             <div class="attr-wrap">
@@ -98,35 +95,49 @@
 <script>
     import Swiper from '../../../assets/js/libs/swiper.js';
     import TweenMax from '../../../assets/js/libs/TweenMax.js';
-    import { mapState ,mapMutations} from 'vuex'
+    import { mapState ,mapMutations,mapActions} from 'vuex'
     export default {
         name: "goods-item",
         data(){
             return{
                 isPanel:false,
                 amount:1,
+                gid:this.$route.query.gid?this.$route.query.gid:""
             }
         },
         mounted(){
-            new Swiper(this.$refs['swiper-wrap'], {
-                autoplay: 3000,
-                pagination : this.$refs['swiper-pagination'],
-                paginationClickable :true,
-                autoplayDisableOnInteraction : false
-            })
+           
         },
         created(){
             this.isMove=true;
+            this.getDetails({gid:this.gid,success:()=>{
+                this.$nextTick(()=>{
+                    new Swiper(this.$refs['swiper-wrap'], {
+                        autoplay: 3000,
+                        pagination : this.$refs['swiper-pagination'],
+                        paginationClickable :true,
+                        autoplayDisableOnInteraction : false
+                    })
+                })
+            }});
+            this.getSpec({gid:this.gid});
+            this.getReviews({gid:this.gid});
         },
         computed:{
             ...mapState({
-                attrs:(state)=>state.goods.attrs
+                attrs:(state)=>state.goods.attrs,
+                details:(state)=>state.goods.details,
             })
             
         },
         methods:{
             ...mapMutations({
                 SELECT_ATTR:"goods/SELECT_ATTR"
+            }),
+            ...mapActions({
+                getDetails:"goods/getDetails",
+                getSpec:"goods/getSpec",
+                getReviews:"goodsReview/getReviews"
             }),
             //显示属性面板
             showPanel(){

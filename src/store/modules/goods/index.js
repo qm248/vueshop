@@ -1,47 +1,14 @@
 import Vue from 'vue';
-import { getClassifyData ,getGoodsData } from "../../../api/goods/index"
+import { getClassifyData ,getGoodsData,getDetailsData ,getSpecData } from "../../../api/goods/index"
 
 export default{
     namespaced:true,
     state:{
         classifys:[],
         goods:[],
-        attrs:[
-            {
-                title:"颜色",
-                values:[
-                    {
-                        value:'白色',
-                        active:true
-                    },
-                    {
-                        value:'黑色',
-                        active:false
-                    },{
-                        value:'红色',
-                        active:false
-                    },
-                ]
-            },
-            {
-                title:"尺码",
-                values:[
-                    {
-                        value:'37',
-                        active:false
-                    },
-                    {
-                        value:'36',
-                        active:false
-                    },{
-                        value:'35',
-                        active:false
-                    },
-                ]
-            }
-
-
-        ]
+        attrs:[],
+        details:{},
+        
     },
     mutations:{
         ['SET_CLASSIFYS'](state,payload){
@@ -74,6 +41,13 @@ export default{
                 state.attrs[payload.index].values[payload.index2].active = true;
                 Vue.set( state.attrs[payload.index].values[payload.index2],payload.index2,state.attrs[payload.index].values[payload.index2])
             }
+        },
+        ['SET_DETAILS'](state,payload){
+            state.details = payload.details;
+        },
+        //设置商品规格
+        ['SET_ATTRS'](state,payload){
+            state.attrs=payload.attrs;
         }
     },
     actions:{
@@ -90,6 +64,7 @@ export default{
                 }
             })
         },
+        //右侧商品
         getGoods(conText,payload){
             getGoodsData(payload.cid).then(res=>{
                 if(res.code == 200){
@@ -101,7 +76,31 @@ export default{
                     conText.commit('SET_GOODS',{goods:[]});
                 }
             })
-        }
-    }
+        },
+        getDetails(conText,payload){
+            getDetailsData(payload.gid).then(res=>{
+                if(res.code==200){
+                    conText.commit('SET_DETAILS',{details:res.data})
+                }
+                if(payload.success){
+                    payload.success();
+                }
+            })
+        },
+        getSpec(conText,payload){
+            getSpecData(payload.gid).then(res=>{
+                if(res.code==200){
+                    for(let i=0; i<res.data.length;i++){
+                        for(let j=0; j<res.data[i].values.length;j++){
+                            res.data[i].values[j].active=false;
+                        }
+                    }
+                    conText.commit('SET_ATTRS',{attrs:res.data});
+                }
+            })
+        },
+
+    },
+
 
 }
