@@ -17,37 +17,21 @@
             </div>
         </div>
         <div class="reviews-main">
-            <div class="reviews-title">商品评价（10000）</div>
-            <div>
+            <div class="reviews-title">商品评价（{{total}}）</div>
+            <div v-show="reviews.length>0">
                 <div class="reviews-wrap">
-                    <div class="reviews-list">
+                    <div class="reviews-list" v-for="(item,index) in reviews" :key="index">
                         <div class="uinfo">
-                            <div class="head"><img src="//vueshop.glbuys.com/userfiles/head/128934005.jpg" alt=""></div>
-                            <div class="nickname">会员名字</div>
+                            <div class="head"><img :src="item.head" alt=""></div>
+                            <div class="nickname">{{ item.nickname }}</div>
                         </div>
-                        <div class="reviews-content">dfdbhjg hfhfhhf</div>
-                        <div class="reviews-date">2023-3-4</div>
-                    </div>
-                    <div class="reviews-list">
-                        <div class="uinfo">
-                            <div class="head"><img src="//vueshop.glbuys.com/userfiles/head/128934005.jpg" alt=""></div>
-                            <div class="nickname">会员名字</div>
-                        </div>
-                        <div class="reviews-content">dfdbhjg hfhfhhf</div>
-                        <div class="reviews-date">2023-3-4</div>
-                    </div>
-                    <div class="reviews-list">
-                        <div class="uinfo">
-                            <div class="head"><img src="//vueshop.glbuys.com/userfiles/head/128934005.jpg" alt=""></div>
-                            <div class="nickname">会员名字</div>
-                        </div>
-                        <div class="reviews-content">dfdbhjg hfhfhhf</div>
-                        <div class="reviews-date">2023-3-4</div>
+                        <div class="reviews-content">{{ item.content }}</div>
+                        <div class="reviews-date">{{ item.times }}</div>
                     </div>
                 </div>
-                <div class="reviews-more">查看更多评价</div>
+                <div class="reviews-more" @click="$router.replace('/goods/details/review?gid='+gid)">查看更多评价</div>
             </div>
-            <div class="no-data">暂无评价！</div>
+            <div class="no-data" v-show="reviews.length<=0">暂无评价！</div>
         </div>
         <div class="bottom-btn-wrap">
             <div class="btn fav">收藏</div>
@@ -127,6 +111,9 @@
             ...mapState({
                 attrs:(state)=>state.goods.attrs,
                 details:(state)=>state.goods.details,
+                reviews:(state)=>state.goodsReview.reviews,
+                total:(state)=>state.goodsReview.total,
+
             })
             
         },
@@ -216,6 +203,7 @@
     width: 100%;
     height: auto;
     background: #fff;
+    padding-bottom: 1.6rem;
 }
 .reviews-main .reviews-title{
     color: #969696;
