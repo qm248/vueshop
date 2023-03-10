@@ -147,6 +147,9 @@
                     TweenMax.to(cloneImg, 2, {bezier:[{x:cloneImg.offsetLeft, y:-100},{x:cartIcon.offsetLeft, y:-cartTop}],onComplete:()=>{
                         cloneImg.remove();
                         this.isMove=true;
+                        let cartData = [];
+                         
+
                     }});
                     TweenMax.to(cloneImg,0.2,{rotation:360,repeat:-1});
                 }
