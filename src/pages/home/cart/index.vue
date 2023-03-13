@@ -5,45 +5,122 @@
             <div class="title">购物车</div>
             <div class="right-btn"></div>
         </div>
-        <div class="cart-list">
-            <div class="select-btn active"></div>
+        <div class="cart-list" v-for="(item,index) in cartData" :key="index">
+            <div :class="{'select-btn':true, active:item.checked}" @click="selectItem(index)"></div>
             <div class="image-wrap">
-                <div class="image"><img src="//vueshop.glbuys.com/uploadfiles/1524556409.jpg" alt="" /></div>
-                <div class="del">删除</div>
+                <div class="image"><img src="item.img" alt="" /></div>
+                <div class="del" @click="delItem(index)">删除</div>
             </div>
             <div class="goods-wrap">
-                <div class="goods-title">高跟鞋女2018新款春季单鞋仙女甜美链子尖头防水台细跟女鞋一字带</div>
+                <div class="goods-title">{{ item.title }}</div>
                 <div class="goods-attr">
-                    <span>颜色：白色</span>
+                    <span v-for="(item2,index2) in item.attrs" :key="index2">{{ item2.title }}:
+                        <template v-for="(item3,index3) in item2.param"> {{ item3.title }}</template>
+                    </span>
                 </div>
                 <div class="buy-wrap">
-                    <div class="price">￥228</div>
+                    <div class="price">￥{{ item.price }}</div>
                     <div class="amount-input-wrap">
-                        <div class="btn dec active">-</div>
-                        <div class="amount-input"><input type="tel"></div>
-                        <div class="btn inc">+</div>
+                        <div :class=" item.amount>1?'btn dec':'btn dec active'" @click="DEC_AMOUNT({index:index})">-</div>
+                        <div class="amount-input"><input type="tel" :value="item.amount"
+                            @input="SET_AMOUNT({index:index,amount:$event.target.value})">
+                        </div>
+                        <div class="btn inc" @click="INC_AMOUNT({index:index})">+</div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="orderend-wrap">
             <div class="select-area">
-                <div class="select-wrap">
-                    <div class="select-btn active"></div>
-                    <div class="select-text"></div>
+                <div class="select-wrap" @click="allSelect()">
+                    <div :class="{'select-btn':true, active:isAllSelect}"></div>
+                    <div class="select-text">全选</div>
                 </div>
-                <div class="total">运费：<span>123</span> 合计：<span>132</span></div>
+                <div class="total">运费：<span>{{ freight }}</span> 合计：<span>{{ total }}</span></div>
             </div>
-            <div class="orderend-btn disable">去结算</div>
+            <div :class="total>0? 'orderend-btn' : 'orderend-btn disable'" @click="statement()">去结算</div>
         </div>
 
     </div>
 </template>
 
 <script>
+import {mapState, mapMutations,mapGetters } from 'vuex';
     export default {
         name: "cart",
+        data(){
+            return{
+                isAllSelect:true
+            }
+        },
+        created(){
+            this.checkAllSelect();
+        },
+        computed:{
+            ...mapState({
+                cartData:(state)=>state.cart.cartData,
+            }),
+            ...mapGetters({
+                freight:'cart/freight',
+                total:"cart/total"
+            })
+        },
         methods:{
+            ...mapMutations({
+                DEL_ITEM:'cart/DEL_ITEM',
+                SET_AMOUNT:"cart/SET_AMOUNT",
+                INC_AMOUNT:'cart/INC_AMOUNT',
+                DEC_AMOUNT:'cart/DEC_AMOUNT',
+                SELECT_ITEM:'cart/SELECT_ITEM',
+                ALL_SELECT_ITEM:"cart/ALL_SELECT_ITEM"
+            }),
+            delItem(index){
+                this.DEL_ITEM({index:index});
+                this.checkAllSelect();
+            },
+            selectItem(index){
+                this.SELECT_ITEM({index:index})
+                if(this.cartData.length>0){
+                    let isChecked = true;
+                    for (let i = 0; i < this.cartData.length; i++) {
+                        if(!this.cartData[i].checked){
+                            isChecked=false;
+                            break;
+                        }
+                    }
+                    this.isAllSelect=isChecked;
+                }else{
+                    this.isAllSelect=false;
+                }
+            },
+            allSelect(){
+                if(this.cartData.length>0){
+                    this.isAllSelect=!this.isAllSelect;
+                    this.ALL_SELECT_ITEM({checked:this.isAllSelect});
+                }
+            },
+            checkAllSelect(){
+                if(this.cartData.length>0){
+                    let isChecked=true;
+                    for(let i=0;i<this.cartData.length;i++){
+                        if(!this.cartData[i].checked){
+                            isChecked=false;
+                            break;
+                        }
+                    }
+                    this.isAllSelect=isChecked;
+                }else{
+                    this.isAllSelect=false;
+                }
+            },
+            //去结算
+            statement(){
+                if(this.total>0){
+                    
+                }
+            }
+
+
 
         }
     }
