@@ -1,14 +1,10 @@
 <template>
     <div class="cart-main">
-        <div class="sub-header">
-            <div class="back"></div>
-            <div class="title">购物车</div>
-            <div class="right-btn"></div>
-        </div>
+        <SubHeader title="购物车" :isBack="$route.query.from==='goods_details'?true:false"></SubHeader>
         <div class="cart-list" v-for="(item,index) in cartData" :key="index">
             <div :class="{'select-btn':true, active:item.checked}" @click="selectItem(index)"></div>
             <div class="image-wrap">
-                <div class="image"><img src="item.img" alt="" /></div>
+                <div class="image"><img :src="item.img" alt="" /></div>
                 <div class="del" @click="delItem(index)">删除</div>
             </div>
             <div class="goods-wrap">
@@ -46,12 +42,16 @@
 
 <script>
 import {mapState, mapMutations,mapGetters } from 'vuex';
+import SubHeader from '../../../components/sub_header/index.vue'
     export default {
         name: "cart",
         data(){
             return{
                 isAllSelect:true
             }
+        },
+        components:{
+            SubHeader
         },
         created(){
             this.checkAllSelect();
@@ -131,45 +131,6 @@ import {mapState, mapMutations,mapGetters } from 'vuex';
     width: 100%;
     margin-top: 1rem;
     margin-bottom: 2.2rem;
-}
-.sub-header{
-    width: 100%;
-    height: 1rem;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #efefef;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    justify-content: space-between;
-    padding: 0 0.1rem;
-    box-sizing: border-box;
-}
-.sub-header .back{
-    width: 0.8rem;
-    height: 0.8rem;
-    background-image: url('../../../assets/images/home/goods/back.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-.sub-header .title{
-    width: 79%;
-    height: auto;
-    font-size: 0.32rem;
-    text-align: center;
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-.sub-header .right-btn{
-    width: auto;
-    height: auto;
-    font-size: 0.32rem;
 }
 .cart-main .cart-list{
     width: 100%;

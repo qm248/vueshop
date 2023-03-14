@@ -7,7 +7,7 @@
                 <div :class="{'tab-name':true,active:contentStyle}" @click="$router.replace('/goods/details/content?gid='+gid)">详情</div>
                 <div :class="{'tab-name':true,active:reviewsStyle}" @click="$router.replace('/goods/details/review?gid='+gid)">评价</div>
             </div>
-            <div id="cart-icon" class="cart-icon" @click="$route.push('/cart?from=goods_details')">
+            <div id="cart-icon" class="cart-icon" @click="$router.push('/cart?from=goods_details')">
                 <div class="spot"></div>
             </div>
         </div>
