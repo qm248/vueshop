@@ -36,3 +36,5 @@ git:git config --global --unset https.proxy //撤销代理 pull代码报错443�
 cmd:ipconfig/flushdns //刷新dns解析缓存
 
 正则：/[^\d|\.]/g 只允许数字或者.存在 
+
+//13717628483

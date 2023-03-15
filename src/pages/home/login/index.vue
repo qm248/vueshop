@@ -2,14 +2,16 @@
     <div class="page">
         <SubHeader title="会员登录"></SubHeader>
        <div class="main">
-            <div class="code-wrap" style="margin-top:0px"><input type="text" placeholder="手机号"></div>
+            <div class="code-wrap" style="margin-top:0px"><input type="text" placeholder="手机号"
+                v-model="cellphone"></div>
             <div class="password-wrap">
-                <div class="password"><input type="text" placeholder="密码"></div>
+                <div class="password"><input :type="isOpen? 'text':'password'" placeholder="密码"
+                v-model="password"></div>
                 <div class="switch-wrap">
-                    <van-switch active-color="#eb1625"></van-switch>
+                    <van-switch v-model="isOpen" active-color="#eb1625"></van-switch>
                 </div>
             </div>
-            <div class="sure-btn">登录</div>
+            <div class="sure-btn" @click="doLogin">登录</div>
             <div class="fastreg-wrap">
                 <div><img src="../../../assets/images/home/index/forget.png" alt="忘记密码">忘记密码</div>
                 <div><img src="../../../assets/images/home/index/reg.png" alt="忘记密码">快速注册</div>
@@ -29,8 +31,9 @@
         name: "login",
         data(){
             return {
-                username:"",
-                password:""
+                isOpen:false,
+                cellphone:"",
+                password:"",
             }
         },
         components:{
@@ -41,20 +44,24 @@
                 login:"user/login"
             }),
             doLogin(){
-                if (this.username.match(/^\s*$/)){
-                    alert("请输入用户名");
+                if (this.cellphone.match(/^\s*$/)){
+                    Toast("请输入手机号");
+                    return;
+                }
+                if(!this.cellphone.match(/^1[0-9][0-9]\d{8}$/)){
+                    Toast("手机号格式不正确");
                     return;
                 }
                 if (this.password.match(/^\s*$/)){
-                    alert("请输入密码");
+                    Toast("请输入密码");
                     return;
                 }
-                this.login({cellphone:this.username,password:this.password,success:(res)=>{
+                this.login({cellphone:this.cellphone,password:this.password,success:(res)=>{
                         // console.log(res);
                         if (res.code===200){
                             this.$router.go(-1)
                         } else{
-                            alert(res.data);
+                            Toast(res.data);
                         }
                     }});
                 // request(process.env.VUE_APP_API+"/home/user/pwdlogin?token=1ec949a15fb709370f","post",{cellphone:this.username,password:this.password}).then(res=>{

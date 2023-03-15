@@ -2,26 +2,10 @@ import {loginData,safeUserData,safeOutLoginData} from "../../../api/user";
 let modules={
     namespaced:true,
     state:{
-        users:[
-            {name:"张三",age:8},
-            {name:"李四",age:18},
-            {name:"王五",age:28},
-            {name:"赵六",age:38}
-        ],
         uid:localStorage['uid']?localStorage['uid']:"",
         nickname:localStorage['nickname']?localStorage['nickname']:"",
         isLogin:localStorage['isLogin']?Boolean(localStorage['isLogin']):false,
         authToken:localStorage["authToken"]?localStorage["authToken"]:""
-    },
-    getters:{//有时候我们需要从 store 中的 state 中派生出一些状态，例如对列表进行过滤并计数
-        getUsers(state){
-            // console.log(state);
-            let aUser=state.users.filter((item)=>{
-                return item.age>=18
-            })
-            // console.log(aUser);
-            return aUser;
-        }
     },
     mutations:{
         ["SET_LOGIN"](state,payload){

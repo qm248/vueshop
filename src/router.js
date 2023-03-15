@@ -47,6 +47,12 @@ let router=new Router({
             component:()=>import("./pages/home/login"),
             meta:{keepAlive:false}
         },
+        {
+            path:"/reg",
+            name:"reg",
+            component:()=>import("./pages/home/reg"),
+            meta:{keepAlive:false}
+        },
         // {
         //     path:"/ucenter",
         //     name:"ucenter",
