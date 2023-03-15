@@ -2,7 +2,7 @@
     <div class="page">
         <SubHeader title="会员登录"></SubHeader>
        <div class="main">
-            <div class="code-wrap"><input type="text" placeholder="手机号"></div>
+            <div class="code-wrap" style="margin-top:0px"><input type="text" placeholder="手机号"></div>
             <div class="password-wrap">
                 <div class="password"><input type="text" placeholder="密码"></div>
                 <div class="switch-wrap">
@@ -19,9 +19,12 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import {mapActions} from "vuex";
     import {Switch,Toast} from 'vant';
     import SubHeader from '../../../components/sub_header/index.vue'
+    Vue.use(Switch);
+    Vue.use(Toast)
     export default {
         name: "login",
         data(){
@@ -80,6 +83,11 @@
     width: 100%;
     padding-top: 1.4rem;
 }
+.cellphone-wrap{width:90%;height:0.84rem;margin:0 auto;display: flex;display: -webkit-flex;justify-content: space-between;-webkit-justify-content: space-between;}
+.cellphone-wrap .cellphone{width:62%;height:100%;border:#EFEFEF solid 1px;border-radius: 2px;}
+.cellphone-wrap .cellphone input,.code-wrap input,.password-wrap .password input{width:92%;height:95%;font-size:0.28rem;padding-left:0.2rem;}
+.cellphone-wrap .code-btn{width:35%;height:0.82rem;background:#EAEAEA;color:#717376;border:#EAEAEA solid 1px;border-radius: 2px;font-size:0.28rem;text-align:center;line-height:0.82rem;}
+.cellphone-wrap .code-btn.success{background:#FFFFFF;border:1px solid #EB1625;color:#EB1625}
 .code-wrap{
     width: 90%;
     height: 0.84rem;
@@ -87,6 +95,11 @@
     border-radius: 2px;
     border: #efefef solid 1px;
     margin-top: 0.4rem;
+}
+.code-wrap input{
+    width: 100%;
+    /* height: 98%; */
+
 }
 .password-wrap{
     width: 90%;
