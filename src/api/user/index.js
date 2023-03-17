@@ -15,3 +15,12 @@ export function safeUserData(data) {
 export function safeOutLoginData(data) {
     return request(config.baseApi+"/home/user/safeout?token="+config.token, "post",data)
 }
+
+//检测图文验证码是否正确
+export function checkVCodeData(vcode){
+    return request(config.baseApi+"/home/user/checkvcode?token="+config.token,'post',vcode)
+}
+//是否注册过会员
+export function isRegData(username){
+    return request(config.baseApi+"/home/user/isreg?token="+config.token,"post",{username:username});
+}

@@ -1,4 +1,4 @@
-import {loginData,safeUserData,safeOutLoginData} from "../../../api/user";
+import {loginData,safeUserData,safeOutLoginData,checkVCodeData,isRegData} from "../../../api/user";
 let modules={
     namespaced:true,
     state:{
@@ -59,6 +59,18 @@ let modules={
                     payload.success(res)
                 }
             });
+        },
+        //检测图片验证码
+        checkVCode(conText,payload){
+            return checkVCodeData(payload.vcode).then(res=>{
+                return res;
+            })
+        },
+        //是否注册会员
+        isReg(conText,payload){
+            return isRegData(payload.username).then(res=>{                
+                return res;
+            })
         }
     }
 }
