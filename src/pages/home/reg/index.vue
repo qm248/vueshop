@@ -6,7 +6,7 @@
                 <div class="vcode-img"><img :src="showCode" alt="" @click="changeVCode($event)"></div>
             </div>
             <div class="cellphone-wrap">
-                <div class="cellphone"><input type="tel" placeholder="请输入手机号" v-model="cellphone"></div>
+                <div class="cellphone"><input type="tel" placeholder="请输入手机号" v-model="cellphone" @input="checkCellphone"></div>
                 <div :class="{'code-btn':true, 'success':isSendMsgCode}" @click="getMsgCode()">{{ msgCodeText }}</div>
             </div>
             <div class="code-wrap">
@@ -43,7 +43,6 @@
                 password:"",
                 isOpen:false,
                 isSendMsgCode:false,
-
             }
         },
         components:{
@@ -51,11 +50,13 @@
         },
         created(){
             this.timer=null;
+            this.isSubmit=true;
         },
         methods:{
             ...mapActions({
                 checkVCode:"user/checkVCode",
                 isReg:"user/isReg",
+                regUser:"user/regUser"
             }),
             //重新获取验证码
             changeVCode(e){
@@ -92,10 +93,20 @@
                     Toast("请输入密码");
                     return;
                 }
-
+                if(this.isSubmit){
+                    this.isSubmit=false;
+                    this.regUser({cellphone:this.cellphone,password:this.password,vcode:this.vCode,success:(res)=>{
+                        if(res.code===200){
+                            this.$router.push('/login?from=reg');
+                        }else{
+                            Toast(res.data);
+                        }
+                    }})
+                }
+                
             },
             async getMsgCode(){
-                if(isSendMsgCode){
+                if(this.isSendMsgCode){
                     if(this.vCode.match(/^\s*$/)){
                         Toast('请输入图文验证码');
                         return;
@@ -134,8 +145,26 @@
                 
 
                 }
+            },
+            checkCellphone(){
+                let isChecked = true;
+                if(this.cellphone.match(/^\s*$/)){
+                    isChecked=false
+                };
+                if(!this.cellphone.match(/^1[0-9][0-9]\d{8}$/)){
+                    isChecked=false
+                }
+                if(isChecked){
+                    this.isSendMsgCode=true
+                }else{
+                    this.isSendMsgCode=false;
+                }
+
             }
                         
+        },
+        beforeDestroy(){
+            clearInterval(this.timer);
         }
     }
 </script>

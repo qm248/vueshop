@@ -24,3 +24,8 @@ export function checkVCodeData(vcode){
 export function isRegData(username){
     return request(config.baseApi+"/home/user/isreg?token="+config.token,"post",{username:username});
 }
+
+//会员注册
+export function regUserData(data){
+    return request(config.baseApi+"/home/user/reg?token="+config.token,"post",data);
+}

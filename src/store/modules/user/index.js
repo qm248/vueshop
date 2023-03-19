@@ -1,4 +1,4 @@
-import {loginData,safeUserData,safeOutLoginData,checkVCodeData,isRegData} from "../../../api/user";
+import {loginData,safeUserData,safeOutLoginData,checkVCodeData,isRegData,regUserData} from "../../../api/user";
 let modules={
     namespaced:true,
     state:{
@@ -70,6 +70,14 @@ let modules={
         isReg(conText,payload){
             return isRegData(payload.username).then(res=>{                
                 return res;
+            })
+        },
+        //注册会员
+        regUser(conText,payload){
+            regUserData(payload).then(res=>{
+                if(payload.success){
+                    payload.success(res)
+                }
             })
         }
     }
