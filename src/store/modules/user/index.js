@@ -1,11 +1,14 @@
-import {loginData,safeUserData,safeOutLoginData,checkVCodeData,isRegData,regUserData} from "../../../api/user";
+import {loginData,safeUserData,safeOutLoginData,checkVCodeData,isRegData,regUserData,getUserInfoData} from "../../../api/user";
 let modules={
     namespaced:true,
     state:{
         uid:localStorage['uid']?localStorage['uid']:"",
         nickname:localStorage['nickname']?localStorage['nickname']:"",
         isLogin:localStorage['isLogin']?Boolean(localStorage['isLogin']):false,
-        authToken:localStorage["authToken"]?localStorage["authToken"]:""
+        authToken:localStorage["authToken"]?localStorage["authToken"]:"",
+        head:"",
+        points:0,
+        favs:[]
     },
     mutations:{
         ["SET_LOGIN"](state,payload){
@@ -27,6 +30,11 @@ let modules={
             localStorage.removeItem("nickname");
             localStorage.removeItem("isLogin");
             localStorage.removeItem("authToken");
+        },
+        ['SET_USER_INFO'](state,payload){
+            state.head=payload.head;
+            state.points=payload.points;
+            state.nickname=payload.nickname;
         }
     },
     actions:{
@@ -77,6 +85,19 @@ let modules={
             regUserData(payload).then(res=>{
                 if(payload.success){
                     payload.success(res)
+                }
+            })
+        },
+        //获取会员信息
+        getUserInfo(conText,payload){
+            getUserInfoData(conText.state.uid).then(res=>{
+                if(res.code===200){
+                    conText.commit('SET_USER_INFO',{
+                        head:res.data.head,points:res.data.points,nickname:res.data.nickname
+                    })
+                    if(payload && payload.success){
+                        payload.success(res.data);
+                    }
                 }
             })
         }
