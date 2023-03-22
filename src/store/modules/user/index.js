@@ -26,10 +26,14 @@ let modules={
             state.nickname="";
             state.isLogin=false;
             state.authToken="";
+            state.points=0;
+            state.head="";
             localStorage.removeItem("uid");
             localStorage.removeItem("nickname");
             localStorage.removeItem("isLogin");
             localStorage.removeItem("authToken");
+            localStorage.removeItem("cartData");
+            sessionStorage.removeItem("addsid");
         },
         ['SET_USER_INFO'](state,payload){
             state.head=payload.head;
@@ -55,6 +59,7 @@ let modules={
             safeOutLoginData({uid:conText.state.uid}).then(res=>{
                 // console.log(res);
             });
+            conText.rootState.cart.cartData=[];
             conText.commit("OUT_LOGIN");
         },
         //会员安全认证
@@ -62,7 +67,10 @@ let modules={
             // console.log(conText.state.uid);
             safeUserData({uid:conText.state.uid,auth_token:conText.state.authToken}).then(res=>{
                 // console.log(res);
-                conText.commit("OUT_LOGIN");
+                if(res.code!==200){
+                    conText.rootState.cart.cartData=[];
+                    conText.commit("OUT_LOGIN");
+                }
                 if (payload.success){
                     payload.success(res)
                 }

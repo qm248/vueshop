@@ -83,6 +83,11 @@ let router=new Router({
             component:()=>import('./pages/home/goods/search')
         },
         {
+            path:'/order',
+            name:"order",
+            component:()=>import('./pages/home/order/index')
+        },
+        {
             path:"/goods/details",
             name:"goods-details",
             component:()=>import("./pages/home/goods/details"),

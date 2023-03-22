@@ -116,12 +116,9 @@ import SubHeader from '../../../components/sub_header/index.vue'
             //去结算
             statement(){
                 if(this.total>0){
-                    
+                    this.$router.push('/order')
                 }
             }
-
-
-
         }
     }
 </script>

@@ -47,7 +47,7 @@
                 <li>我的收藏</li>
                 <li></li>
             </ul>
-            <div class="btn">登录/注册</div>
+            <div class="btn" @click="isLogin?outLogin():$router.push('/login')">{{isLogin?'退出':'登录/注册'}}</div>
         </div>
 
     </div>
@@ -61,11 +61,6 @@ import { Dialog } from 'vant'
 Vue.use(Dialog)
     export default {
         name: "ucenter",
-        data(){
-            return {
-
-            }
-        },
         created(){
             this.getUserInfo();
         },
@@ -74,8 +69,19 @@ Vue.use(Dialog)
         },
         methods:{
             ...mapActions({
-                getUserInfo:"user/getUserInfo"
-            })
+                getUserInfo:"user/getUserInfo",
+                asyncOutLogin:"user/outLogin"
+            }),
+            outLogin(){
+                Dialog.confirm({
+                    title:"",
+                    message:"确认要退出吗?"
+                }).then(()=>{
+                    this.asyncOutLogin();
+                }).catch(()=>{
+
+                })
+            }
            
         },
         computed:{
